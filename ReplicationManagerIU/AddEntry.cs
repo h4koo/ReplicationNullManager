@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace ReplicationManagerIU
 {
-    public partial class Form1 : Form
+    public partial class AddEntry : Form
     {
-        public Form1()
+        public AddEntry()
         {
             InitializeComponent();
         }
