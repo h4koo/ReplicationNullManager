@@ -92,5 +92,61 @@ namespace ReplicationManagerDA.DataAccess
             }
             return listResult;
         }
+
+        public void Enable(int intIdReplica) {
+            
+            string strQuery = string.Empty;
+
+            try
+            {
+                this.OpenConnection();
+
+                strQuery = "EnableReplica";
+                SqlCommand cmdComando = new SqlCommand(strQuery, this._oConnection);
+                cmdComando.CommandType = CommandType.StoredProcedure;
+
+                cmdComando.Parameters.Add(new SqlParameter("intIdReplica", intIdReplica));
+                cmdComando.Parameters.Add("@intResult", SqlDbType.Int).Direction = ParameterDirection.Output;
+
+                cmdComando.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+                this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, strQuery);
+            }
+            finally
+            {
+                this.CloseConnection();
+            }        
+        }
+        public void Disable(int intIdReplica)
+        {
+
+            string strQuery = string.Empty;
+
+            try
+            {
+                this.OpenConnection();
+
+                strQuery = "DisableReplica";
+                SqlCommand cmdComando = new SqlCommand(strQuery, this._oConnection);
+                cmdComando.CommandType = CommandType.StoredProcedure;
+
+                cmdComando.Parameters.Add(new SqlParameter("intIdReplica", intIdReplica));
+                cmdComando.Parameters.Add("@intResult", SqlDbType.Int).Direction = ParameterDirection.Output;
+
+                cmdComando.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+                this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, strQuery);
+            }
+            finally
+            {
+                this.CloseConnection();
+            }
+        }
     }
 }

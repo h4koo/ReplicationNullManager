@@ -30,6 +30,8 @@
         {
             this.DGVReplicatorData = new System.Windows.Forms.DataGridView();
             this.BtnCommitChanges = new System.Windows.Forms.Button();
+            this.btnEnableDisable = new System.Windows.Forms.Button();
+            this.btnRefresh = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.DGVReplicatorData)).BeginInit();
             this.SuspendLayout();
             // 
@@ -55,11 +57,33 @@
             this.BtnCommitChanges.UseVisualStyleBackColor = true;
             this.BtnCommitChanges.Click += new System.EventHandler(this.BtnCommitChanges_Click);
             // 
+            // btnEnableDisable
+            // 
+            this.btnEnableDisable.Location = new System.Drawing.Point(793, 197);
+            this.btnEnableDisable.Name = "btnEnableDisable";
+            this.btnEnableDisable.Size = new System.Drawing.Size(120, 23);
+            this.btnEnableDisable.TabIndex = 2;
+            this.btnEnableDisable.Text = "Enable/Disable";
+            this.btnEnableDisable.UseVisualStyleBackColor = true;
+            this.btnEnableDisable.Click += new System.EventHandler(this.btnEnableDisable_Click);
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Location = new System.Drawing.Point(686, 197);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(75, 23);
+            this.btnRefresh.TabIndex = 3;
+            this.btnRefresh.Text = "Refresh";
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            // 
             // Core
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1104, 243);
+            this.Controls.Add(this.btnRefresh);
+            this.Controls.Add(this.btnEnableDisable);
             this.Controls.Add(this.BtnCommitChanges);
             this.Controls.Add(this.DGVReplicatorData);
             this.Name = "Core";
@@ -74,6 +98,8 @@
 
         private System.Windows.Forms.DataGridView DGVReplicatorData;
         private System.Windows.Forms.Button BtnCommitChanges;
+        private System.Windows.Forms.Button btnEnableDisable;
+        private System.Windows.Forms.Button btnRefresh;
 
     }
 }

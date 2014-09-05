@@ -14,6 +14,7 @@ namespace ReplicationManagerIU
 {
     public partial class Core : Form
     {
+        List<Replica> replicas = new List<Replica>();
         public Core()
         {
             InitializeComponent();
@@ -27,15 +28,6 @@ namespace ReplicationManagerIU
         private void DGVReplicatorData_CellValidated(object sender, DataGridViewCellEventArgs e)
         {
 
-        //    string headerText = DGVReplicatorData.Columns[e.ColumnIndex].HeaderText;
-        //    string value = (string) DGVReplicatorData.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-
-            // Confirm that the cell is not empty. 
-        //    if (string.IsNullOrEmpty(value)){
-        //        DGVReplicatorData.Rows[e.RowIndex].ErrorText = headerText +" must not be empty";
-        //    }
-
-
         }
 
         private void BtnCommitChanges_Click(object sender, EventArgs e)
@@ -43,18 +35,19 @@ namespace ReplicationManagerIU
             AddEntry addEntry = new AddEntry();
             addEntry.Show();
         }
-
-        private void Core_Load(object sender, EventArgs e)
-        {
+        /// <summary>
+        /// Method that is going to update the ReplicaView List so the GridView will be updated.
+        /// </summary>
+        private void Reload_Replicas() {
             ReplicaDA replicaDA = new ReplicaDA();
-            List<Replica> replicas = replicaDA.GetAllReplicas();
+            replicas = replicaDA.GetAllReplicas();
             List<ReplicaView> replicasView = new List<ReplicaView>();
             if (replicas.Count > 0)
             {
                 foreach (Replica replica in replicas)
                 {
                     replicasView.Add(new ReplicaView(replica));
-                   
+
                 }
                 //Adding Order to the Unorder List
                 DGVReplicatorData.DataSource = replicasView;
@@ -62,7 +55,7 @@ namespace ReplicationManagerIU
                 DGVReplicatorData.Columns["SourceEngine"].DisplayIndex = 1;
                 DGVReplicatorData.Columns["SourceIPAddress"].DisplayIndex = 2;
                 DGVReplicatorData.Columns["SourcePort"].DisplayIndex = 3;
-                DGVReplicatorData.Columns["SourceUser"].DisplayIndex = 4; 
+                DGVReplicatorData.Columns["SourceUser"].DisplayIndex = 4;
                 DGVReplicatorData.Columns["SourcePassword"].DisplayIndex = 5;
                 DGVReplicatorData.Columns["SourceDatabase"].DisplayIndex = 6;
                 DGVReplicatorData.Columns["SourceTable"].DisplayIndex = 7;
@@ -73,7 +66,7 @@ namespace ReplicationManagerIU
                 DGVReplicatorData.Columns["TerminalUser"].DisplayIndex = 11;
                 DGVReplicatorData.Columns["TerminalPassword"].DisplayIndex = 12;
                 DGVReplicatorData.Columns["TerminalDatabase"].DisplayIndex = 13;
-                
+
                 DGVReplicatorData.Columns["Created"].DisplayIndex = 14;
                 DGVReplicatorData.Columns["LastCheckOnSource"].DisplayIndex = 15;
                 DGVReplicatorData.Columns["LastCheckOnTerminal"].DisplayIndex = 16;
@@ -85,6 +78,28 @@ namespace ReplicationManagerIU
             }
         }
 
+        private void Core_Load(object sender, EventArgs e)
+        {
+            Reload_Replicas();
+        }
 
+        private void btnEnableDisable_Click(object sender, EventArgs e)
+        {
+            ReplicaDA replicaDA = new ReplicaDA();
+            int selectedReplicaId = replicas[DGVReplicatorData.CurrentCell.RowIndex].IntIdReplica;
+            if (!replicas[DGVReplicatorData.CurrentCell.RowIndex].BoolEnable)
+            {
+                replicaDA.Enable(selectedReplicaId);
+            }
+            else {
+                replicaDA.Disable(selectedReplicaId);
+            }
+            Reload_Replicas();
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            Reload_Replicas();
+        }
     }
 }
