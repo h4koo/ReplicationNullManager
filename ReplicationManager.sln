@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{24EB2B
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReplicationManagerDA", "ReplicationManagerDA\ReplicationManagerDA.csproj", "{F728E3D7-D379-40C7-AA4C-646ABCEB51A0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{CD781605-2B45-40A5-A407-8B8C36A5C2F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD781605-2B45-40A5-A407-8B8C36A5C2F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD781605-2B45-40A5-A407-8B8C36A5C2F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F728E3D7-D379-40C7-AA4C-646ABCEB51A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F728E3D7-D379-40C7-AA4C-646ABCEB51A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F728E3D7-D379-40C7-AA4C-646ABCEB51A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F728E3D7-D379-40C7-AA4C-646ABCEB51A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

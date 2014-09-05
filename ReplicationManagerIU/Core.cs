@@ -7,8 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
-
+using ReplicationManagerDA;
+using UtilitariosCD.Entidades;
 namespace ReplicationManagerIU
 {
     public partial class Core : Form
@@ -41,6 +41,11 @@ namespace ReplicationManagerIU
         {
             AddEntry addEntry = new AddEntry();
             addEntry.Show();
+        }
+
+        private void Core_Load(object sender, EventArgs e)
+        {
+          
         }
 
 

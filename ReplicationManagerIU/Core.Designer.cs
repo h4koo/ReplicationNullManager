@@ -145,6 +145,7 @@
             this.Controls.Add(this.DGVReplicatorData);
             this.Name = "Core";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Core_Load);
             ((System.ComponentModel.ISupportInitialize)(this.DGVReplicatorData)).EndInit();
             this.ResumeLayout(false);
 
