@@ -45,6 +45,7 @@
             // 
             // DGVReplicatorData
             // 
+            this.DGVReplicatorData.AllowUserToAddRows = false;
             this.DGVReplicatorData.AllowUserToOrderColumns = true;
             this.DGVReplicatorData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DGVReplicatorData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -60,6 +61,7 @@
             this.ClnDestinyPassword});
             this.DGVReplicatorData.Location = new System.Drawing.Point(13, 23);
             this.DGVReplicatorData.Name = "DGVReplicatorData";
+            this.DGVReplicatorData.ReadOnly = true;
             this.DGVReplicatorData.Size = new System.Drawing.Size(1044, 150);
             this.DGVReplicatorData.TabIndex = 0;
             this.DGVReplicatorData.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGVReplicatorData_CellValidated);
@@ -68,51 +70,61 @@
             // 
             this.ClnSourceMotor.HeaderText = "Source Motor";
             this.ClnSourceMotor.Name = "ClnSourceMotor";
+            this.ClnSourceMotor.ReadOnly = true;
             // 
             // ClnSourceIP
             // 
             this.ClnSourceIP.HeaderText = "Source IP";
             this.ClnSourceIP.Name = "ClnSourceIP";
+            this.ClnSourceIP.ReadOnly = true;
             // 
             // ClnDatabaseName
             // 
             this.ClnDatabaseName.HeaderText = "DatabaseName";
             this.ClnDatabaseName.Name = "ClnDatabaseName";
+            this.ClnDatabaseName.ReadOnly = true;
             // 
             // ClnUser
             // 
             this.ClnUser.HeaderText = "User";
             this.ClnUser.Name = "ClnUser";
+            this.ClnUser.ReadOnly = true;
             // 
             // ClnPassword
             // 
             this.ClnPassword.HeaderText = "Password";
             this.ClnPassword.Name = "ClnPassword";
+            this.ClnPassword.ReadOnly = true;
             // 
             // ClnTable
             // 
             this.ClnTable.HeaderText = "Table";
             this.ClnTable.Name = "ClnTable";
+            this.ClnTable.ReadOnly = true;
             // 
             // ClnDestinyIP
             // 
             this.ClnDestinyIP.HeaderText = "Destiny IP";
             this.ClnDestinyIP.Name = "ClnDestinyIP";
+            this.ClnDestinyIP.ReadOnly = true;
             // 
             // ClnDestinyMotor
             // 
             this.ClnDestinyMotor.HeaderText = "Destiny Motor";
             this.ClnDestinyMotor.Name = "ClnDestinyMotor";
+            this.ClnDestinyMotor.ReadOnly = true;
             // 
             // ClnDestinyUser
             // 
             this.ClnDestinyUser.HeaderText = "Destiny User";
             this.ClnDestinyUser.Name = "ClnDestinyUser";
+            this.ClnDestinyUser.ReadOnly = true;
             // 
             // ClnDestinyPassword
             // 
             this.ClnDestinyPassword.HeaderText = "Destiny Password";
             this.ClnDestinyPassword.Name = "ClnDestinyPassword";
+            this.ClnDestinyPassword.ReadOnly = true;
             // 
             // BtnCommitChanges
             // 

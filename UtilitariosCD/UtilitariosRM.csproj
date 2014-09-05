@@ -64,6 +64,7 @@
     <Compile Include="Entidades\Contenedor.cs" />
     <Compile Include="Entidades\ContenedorConUso.cs" />
     <Compile Include="Entidades\ContenedorUsoEnRuta.cs" />
+    <Compile Include="Entidades\Engine.cs" />
     <Compile Include="Entidades\Estado.cs" />
     <Compile Include="Entidades\Factura.cs" />
     <Compile Include="Entidades\HistorialPaquete.cs" />

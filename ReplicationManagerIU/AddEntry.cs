@@ -16,5 +16,25 @@ namespace ReplicationManagerIU
         {
             InitializeComponent();
         }
+
+        private void tbSourcePort_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            //Just Allow Numbers
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) )
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void tbEndPointPort_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            //Just Allow Numbers
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+
     }
 }
