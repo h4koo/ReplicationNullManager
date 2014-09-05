@@ -7,8 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using UtilitariosCD.Entidades;
-using ReplicationManagerDA;
+using UtilitariosCD.Entities;
+using ReplicationManagerDA.DataAccess;
 
 namespace ReplicationManagerIU
 {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UtilitariosCD.Entidades
+namespace UtilitariosCD.Entities
 {
     public class Engine
     {
@@ -18,7 +18,7 @@ namespace UtilitariosCD.Entidades
         public Engine()
         {
             IntIdEngine = -1;
-            _strName = string.Empty;
+            StrName = string.Empty;
         }
 
         #region SETTERS y GETTERS

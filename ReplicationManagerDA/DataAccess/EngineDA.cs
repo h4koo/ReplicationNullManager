@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UtilitariosCD.Entidades;
+using UtilitariosCD.Entities;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.Data;
@@ -11,7 +11,7 @@ using UtilitariosCD.LogErrores;
 using UtilitariosCD.Constantes;
 using System.Reflection;
 
-namespace ReplicationManagerDA
+namespace ReplicationManagerDA.DataAccess
 {
     public class EngineDA : SqlServerDA
     {

@@ -60,26 +60,10 @@
   <ItemGroup>
     <Compile Include="ClasesTipadas\ParamConsultaCT.cs" />
     <Compile Include="Constantes\IConstantes.cs" />
-    <Compile Include="Entidades\Cliente.cs" />
-    <Compile Include="Entidades\Contenedor.cs" />
-    <Compile Include="Entidades\ContenedorConUso.cs" />
-    <Compile Include="Entidades\ContenedorUsoEnRuta.cs" />
-    <Compile Include="Entidades\Engine.cs">
+    <Compile Include="Entities\Engine.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Entidades\Estado.cs" />
-    <Compile Include="Entidades\Factura.cs" />
-    <Compile Include="Entidades\HistorialPaquete.cs" />
-    <Compile Include="Entidades\Lugar.cs" />
-    <Compile Include="Entidades\Paquete.cs" />
-    <Compile Include="Entidades\ParametroGeneral.cs" />
-    <Compile Include="Entidades\Promedio.cs" />
-    <Compile Include="Entidades\Rol.cs" />
-    <Compile Include="Entidades\Ruta.cs" />
-    <Compile Include="Entidades\RutaConUso.cs" />
-    <Compile Include="Entidades\TipoCliente.cs" />
-    <Compile Include="Entidades\TipoEnvio.cs" />
-    <Compile Include="Entidades\Usuario.cs" />
+    <Compile Include="Entities\Replica.cs" />
     <Compile Include="LogErrores\LogErrores.cs" />
   </ItemGroup>
   <ItemGroup>
