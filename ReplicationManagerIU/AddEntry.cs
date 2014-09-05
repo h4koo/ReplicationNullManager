@@ -19,6 +19,13 @@ namespace ReplicationManagerIU
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Source Port Digit Validation
+        /// Date: 9/4/2014
+        /// Created By: Juan Pablo Arias Mora
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void tbSourcePort_KeyPress(object sender, KeyPressEventArgs e)
         {
             //Just Allow Numbers
@@ -27,7 +34,13 @@ namespace ReplicationManagerIU
                 e.Handled = true;
             }
         }
-
+        /// <summary>
+        /// EndPoint Port Digit Validation
+        /// Date: 9/4/2014
+        /// Created By: Juan Pablo Arias Mora
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void tbEndPointPort_KeyPress(object sender, KeyPressEventArgs e)
         {
             //Just Allow Numbers
@@ -49,7 +62,8 @@ namespace ReplicationManagerIU
             EngineDA EnginesDA = new EngineDA();
             List<Engine> Engines = EnginesDA.GetAllSupportedEngines();
 
-            if (Engines.Count > 0){
+            if (Engines.Count > 0)
+            {
                 foreach (Engine engine in Engines)
                 {
                     cbSourceEngine.Items.Add(engine);
@@ -57,6 +71,9 @@ namespace ReplicationManagerIU
                 }
                 cbSourceEngine.SelectedIndex = 0;
                 cbEndPointEngine.SelectedIndex = 0;
+            }
+            else {
+                MessageBox.Show("Supported Engines Not Found", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }           
         }
 

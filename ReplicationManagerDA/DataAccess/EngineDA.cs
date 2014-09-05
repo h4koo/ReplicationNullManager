@@ -15,12 +15,18 @@ namespace ReplicationManagerDA
 {
     public class EngineDA : SqlServerDA
     {
+        /// <summary>
+        /// This is the DA for accessing the Engine table
+        /// Date: 9/4/2014
+        /// Created By: Juan Pablo Arias Mora
+        /// </summary>
+        /// <returns>A list of all the Engines Supported, List<Engine></returns>
         public List<Engine> GetAllSupportedEngines() {
             Engine oEngine = new Engine();
             List<Engine> listResult = new List<Engine>();
             string strQuery = string.Empty;
-            SqlDataReader dtrResultado = null;
-            DataTable dtResultado = new DataTable();
+            SqlDataReader dtrResult = null;
+            DataTable dtResult = new DataTable();
 
             try
             {
@@ -32,15 +38,13 @@ namespace ReplicationManagerDA
 
                 cmdComando.Parameters.Add("@intResult", SqlDbType.Int).Direction = ParameterDirection.Output;
 
-                //Ejecutamos la consulta
-                dtrResultado = cmdComando.ExecuteReader();
+                dtrResult = cmdComando.ExecuteReader();
 
-                //Cargamos la información del cliente en un datatable
-                //para recorrerla de mejor manera.
-                dtResultado.Load(dtrResultado);
+                
+                //Load the Results on the DataTable
+                dtResult.Load(dtrResult);
 
-                //Solo se debe de recorrer una vez ya que se está buscando por las credenciales
-                foreach (DataRow dtrFila in dtResultado.Rows)
+                foreach (DataRow dtrFila in dtResult.Rows)
                 {
                     oEngine = new Engine();
                     oEngine.IntIdEngine = Convert.ToInt32(dtrFila["IdEngine"].ToString());
