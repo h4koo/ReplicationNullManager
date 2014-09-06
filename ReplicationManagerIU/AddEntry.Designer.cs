@@ -51,7 +51,7 @@
             this.cbEndPointDatabase = new System.Windows.Forms.ComboBox();
             this.tbEndPointPassword = new System.Windows.Forms.TextBox();
             this.tbEndPointUser = new System.Windows.Forms.TextBox();
-            this.tbEndPointEngine = new System.Windows.Forms.TextBox();
+            this.tbEndPointServer = new System.Windows.Forms.TextBox();
             this.lbEndPointPassword = new System.Windows.Forms.Label();
             this.lbEngineEndPoint = new System.Windows.Forms.Label();
             this.lbEndPointDatabase = new System.Windows.Forms.Label();
@@ -59,6 +59,7 @@
             this.cbEndPointEngine = new System.Windows.Forms.ComboBox();
             this.lbEndPointIPAddress = new System.Windows.Forms.Label();
             this.btnAddEntry = new System.Windows.Forms.Button();
+            this.btnTerminalTest = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.gbEndPoint.SuspendLayout();
@@ -83,14 +84,14 @@
             this.cbSourceEngine.FormattingEnabled = true;
             this.cbSourceEngine.Location = new System.Drawing.Point(130, 26);
             this.cbSourceEngine.Name = "cbSourceEngine";
-            this.cbSourceEngine.Size = new System.Drawing.Size(194, 28);
+            this.cbSourceEngine.Size = new System.Drawing.Size(212, 28);
             this.cbSourceEngine.TabIndex = 1;
             // 
             // lbSourceIPAddress
             // 
             this.lbSourceIPAddress.AutoSize = true;
             this.lbSourceIPAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbSourceIPAddress.Location = new System.Drawing.Point(6, 69);
+            this.lbSourceIPAddress.Location = new System.Drawing.Point(6, 63);
             this.lbSourceIPAddress.Name = "lbSourceIPAddress";
             this.lbSourceIPAddress.Size = new System.Drawing.Size(91, 20);
             this.lbSourceIPAddress.TabIndex = 2;
@@ -136,14 +137,14 @@
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(330, 364);
+            this.groupBox1.Size = new System.Drawing.Size(370, 364);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Source";
             // 
             // bnSourceTest
             // 
-            this.bnSourceTest.Location = new System.Drawing.Point(150, 219);
+            this.bnSourceTest.Location = new System.Drawing.Point(173, 222);
             this.bnSourceTest.Name = "bnSourceTest";
             this.bnSourceTest.Size = new System.Drawing.Size(78, 30);
             this.bnSourceTest.TabIndex = 14;
@@ -155,7 +156,7 @@
             // 
             this.tbSourcePort.Location = new System.Drawing.Point(130, 101);
             this.tbSourcePort.Name = "tbSourcePort";
-            this.tbSourcePort.Size = new System.Drawing.Size(121, 26);
+            this.tbSourcePort.Size = new System.Drawing.Size(212, 26);
             this.tbSourcePort.TabIndex = 13;
             this.tbSourcePort.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbSourcePort_KeyPress);
             // 
@@ -163,7 +164,7 @@
             // 
             this.lbSourcePort.AutoSize = true;
             this.lbSourcePort.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbSourcePort.Location = new System.Drawing.Point(6, 107);
+            this.lbSourcePort.Location = new System.Drawing.Point(6, 101);
             this.lbSourcePort.Name = "lbSourcePort";
             this.lbSourcePort.Size = new System.Drawing.Size(42, 20);
             this.lbSourcePort.TabIndex = 12;
@@ -171,10 +172,11 @@
             // 
             // cbSourceTable
             // 
+            this.cbSourceTable.Enabled = false;
             this.cbSourceTable.FormattingEnabled = true;
             this.cbSourceTable.Location = new System.Drawing.Point(130, 312);
             this.cbSourceTable.Name = "cbSourceTable";
-            this.cbSourceTable.Size = new System.Drawing.Size(121, 28);
+            this.cbSourceTable.Size = new System.Drawing.Size(212, 28);
             this.cbSourceTable.TabIndex = 11;
             // 
             // cbSourceDatabase
@@ -183,31 +185,31 @@
             this.cbSourceDatabase.FormattingEnabled = true;
             this.cbSourceDatabase.Location = new System.Drawing.Point(130, 274);
             this.cbSourceDatabase.Name = "cbSourceDatabase";
-            this.cbSourceDatabase.Size = new System.Drawing.Size(121, 28);
+            this.cbSourceDatabase.Size = new System.Drawing.Size(212, 28);
             this.cbSourceDatabase.TabIndex = 10;
             this.cbSourceDatabase.SelectedIndexChanged += new System.EventHandler(this.cbSourceDatabase_SelectedIndexChanged);
             this.cbSourceDatabase.SelectedValueChanged += new System.EventHandler(this.cbSourceDatabase_SelectedValueChanged);
             // 
             // tbSourcePassword
             // 
-            this.tbSourcePassword.Location = new System.Drawing.Point(130, 164);
+            this.tbSourcePassword.Location = new System.Drawing.Point(130, 176);
             this.tbSourcePassword.Name = "tbSourcePassword";
-            this.tbSourcePassword.Size = new System.Drawing.Size(121, 26);
+            this.tbSourcePassword.Size = new System.Drawing.Size(212, 26);
             this.tbSourcePassword.TabIndex = 9;
             this.tbSourcePassword.UseSystemPasswordChar = true;
             // 
             // tbSourceUser
             // 
-            this.tbSourceUser.Location = new System.Drawing.Point(130, 132);
+            this.tbSourceUser.Location = new System.Drawing.Point(130, 138);
             this.tbSourceUser.Name = "tbSourceUser";
-            this.tbSourceUser.Size = new System.Drawing.Size(121, 26);
+            this.tbSourceUser.Size = new System.Drawing.Size(212, 26);
             this.tbSourceUser.TabIndex = 8;
             // 
             // tbSourceIPAddress
             // 
-            this.tbSourceIPAddress.Location = new System.Drawing.Point(130, 69);
+            this.tbSourceIPAddress.Location = new System.Drawing.Point(130, 63);
             this.tbSourceIPAddress.Name = "tbSourceIPAddress";
-            this.tbSourceIPAddress.Size = new System.Drawing.Size(121, 26);
+            this.tbSourceIPAddress.Size = new System.Drawing.Size(212, 26);
             this.tbSourceIPAddress.TabIndex = 7;
             // 
             // lbSourceTable
@@ -224,7 +226,7 @@
             // 
             this.lbSourcePassword.AutoSize = true;
             this.lbSourcePassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbSourcePassword.Location = new System.Drawing.Point(6, 170);
+            this.lbSourcePassword.Location = new System.Drawing.Point(6, 176);
             this.lbSourcePassword.Name = "lbSourcePassword";
             this.lbSourcePassword.Size = new System.Drawing.Size(82, 20);
             this.lbSourcePassword.TabIndex = 5;
@@ -232,12 +234,13 @@
             // 
             // gbEndPoint
             // 
+            this.gbEndPoint.Controls.Add(this.btnTerminalTest);
             this.gbEndPoint.Controls.Add(this.tbEndPointPort);
             this.gbEndPoint.Controls.Add(this.lbEndPointPort);
             this.gbEndPoint.Controls.Add(this.cbEndPointDatabase);
             this.gbEndPoint.Controls.Add(this.tbEndPointPassword);
             this.gbEndPoint.Controls.Add(this.tbEndPointUser);
-            this.gbEndPoint.Controls.Add(this.tbEndPointEngine);
+            this.gbEndPoint.Controls.Add(this.tbEndPointServer);
             this.gbEndPoint.Controls.Add(this.lbEndPointPassword);
             this.gbEndPoint.Controls.Add(this.lbEngineEndPoint);
             this.gbEndPoint.Controls.Add(this.lbEndPointDatabase);
@@ -245,7 +248,7 @@
             this.gbEndPoint.Controls.Add(this.cbEndPointEngine);
             this.gbEndPoint.Controls.Add(this.lbEndPointIPAddress);
             this.gbEndPoint.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbEndPoint.Location = new System.Drawing.Point(348, 12);
+            this.gbEndPoint.Location = new System.Drawing.Point(409, 12);
             this.gbEndPoint.Name = "gbEndPoint";
             this.gbEndPoint.Size = new System.Drawing.Size(356, 331);
             this.gbEndPoint.TabIndex = 6;
@@ -256,7 +259,7 @@
             // 
             this.tbEndPointPort.Location = new System.Drawing.Point(130, 104);
             this.tbEndPointPort.Name = "tbEndPointPort";
-            this.tbEndPointPort.Size = new System.Drawing.Size(121, 26);
+            this.tbEndPointPort.Size = new System.Drawing.Size(199, 26);
             this.tbEndPointPort.TabIndex = 12;
             this.tbEndPointPort.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbEndPointPort_KeyPress);
             // 
@@ -272,8 +275,9 @@
             // 
             // cbEndPointDatabase
             // 
+            this.cbEndPointDatabase.Enabled = false;
             this.cbEndPointDatabase.FormattingEnabled = true;
-            this.cbEndPointDatabase.Location = new System.Drawing.Point(130, 225);
+            this.cbEndPointDatabase.Location = new System.Drawing.Point(138, 276);
             this.cbEndPointDatabase.Name = "cbEndPointDatabase";
             this.cbEndPointDatabase.Size = new System.Drawing.Size(121, 28);
             this.cbEndPointDatabase.TabIndex = 10;
@@ -282,7 +286,7 @@
             // 
             this.tbEndPointPassword.Location = new System.Drawing.Point(130, 167);
             this.tbEndPointPassword.Name = "tbEndPointPassword";
-            this.tbEndPointPassword.Size = new System.Drawing.Size(121, 26);
+            this.tbEndPointPassword.Size = new System.Drawing.Size(199, 26);
             this.tbEndPointPassword.TabIndex = 9;
             this.tbEndPointPassword.UseSystemPasswordChar = true;
             // 
@@ -290,15 +294,15 @@
             // 
             this.tbEndPointUser.Location = new System.Drawing.Point(130, 135);
             this.tbEndPointUser.Name = "tbEndPointUser";
-            this.tbEndPointUser.Size = new System.Drawing.Size(121, 26);
+            this.tbEndPointUser.Size = new System.Drawing.Size(199, 26);
             this.tbEndPointUser.TabIndex = 8;
             // 
-            // tbEndPointEngine
+            // tbEndPointServer
             // 
-            this.tbEndPointEngine.Location = new System.Drawing.Point(130, 69);
-            this.tbEndPointEngine.Name = "tbEndPointEngine";
-            this.tbEndPointEngine.Size = new System.Drawing.Size(121, 26);
-            this.tbEndPointEngine.TabIndex = 7;
+            this.tbEndPointServer.Location = new System.Drawing.Point(130, 69);
+            this.tbEndPointServer.Name = "tbEndPointServer";
+            this.tbEndPointServer.Size = new System.Drawing.Size(199, 26);
+            this.tbEndPointServer.TabIndex = 7;
             // 
             // lbEndPointPassword
             // 
@@ -324,7 +328,7 @@
             // 
             this.lbEndPointDatabase.AutoSize = true;
             this.lbEndPointDatabase.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbEndPointDatabase.Location = new System.Drawing.Point(6, 223);
+            this.lbEndPointDatabase.Location = new System.Drawing.Point(14, 274);
             this.lbEndPointDatabase.Name = "lbEndPointDatabase";
             this.lbEndPointDatabase.Size = new System.Drawing.Size(83, 20);
             this.lbEndPointDatabase.TabIndex = 3;
@@ -368,11 +372,21 @@
             this.btnAddEntry.UseVisualStyleBackColor = true;
             this.btnAddEntry.Click += new System.EventHandler(this.btnAddEntry_Click);
             // 
+            // btnTerminalTest
+            // 
+            this.btnTerminalTest.Location = new System.Drawing.Point(130, 222);
+            this.btnTerminalTest.Name = "btnTerminalTest";
+            this.btnTerminalTest.Size = new System.Drawing.Size(78, 30);
+            this.btnTerminalTest.TabIndex = 15;
+            this.btnTerminalTest.Text = "Test";
+            this.btnTerminalTest.UseVisualStyleBackColor = true;
+            this.btnTerminalTest.Click += new System.EventHandler(this.btnTerminalTest_Click);
+            // 
             // AddEntry
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(716, 436);
+            this.ClientSize = new System.Drawing.Size(937, 436);
             this.Controls.Add(this.btnAddEntry);
             this.Controls.Add(this.gbEndPoint);
             this.Controls.Add(this.groupBox1);
@@ -409,7 +423,7 @@
         private System.Windows.Forms.ComboBox cbEndPointDatabase;
         private System.Windows.Forms.TextBox tbEndPointPassword;
         private System.Windows.Forms.TextBox tbEndPointUser;
-        private System.Windows.Forms.TextBox tbEndPointEngine;
+        private System.Windows.Forms.TextBox tbEndPointServer;
         private System.Windows.Forms.Label lbEndPointPassword;
         private System.Windows.Forms.Label lbEngineEndPoint;
         private System.Windows.Forms.Label lbEndPointDatabase;
@@ -421,5 +435,6 @@
         private System.Windows.Forms.TextBox tbSourcePort;
         private System.Windows.Forms.Label lbSourcePort;
         private System.Windows.Forms.Button bnSourceTest;
+        private System.Windows.Forms.Button btnTerminalTest;
     }
 }

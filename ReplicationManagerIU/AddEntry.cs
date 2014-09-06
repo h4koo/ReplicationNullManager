@@ -81,7 +81,11 @@ namespace ReplicationManagerIU
         {
             MessageBox.Show((cbEndPointEngine.SelectedItem as Engine).IntIdEngine.ToString());
         }
-
+        /// <summary>
+        /// Test Conection in order to get the Complete DB list on the Engine
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void bnSourceTest_Click(object sender, EventArgs e)
         {
             cbSourceDatabase.Items.Clear();
@@ -115,10 +119,15 @@ namespace ReplicationManagerIU
         {
 
         }
-
+        /// <summary>
+        /// Query the Engine DB for the Complete Table list
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cbSourceDatabase_SelectedIndexChanged(object sender, EventArgs e)
         {
             cbSourceTable.Items.Clear();
+            cbSourceTable.Text = "";
             //Connexion parameters
             string server = tbSourceIPAddress.Text;
             string user = tbSourceUser.Text;
@@ -136,7 +145,7 @@ namespace ReplicationManagerIU
 
             if (listTables.Count <= 0)
             {
-                MessageBox.Show("Unable to Connect Using those Credentials", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Unable to Get the Tables for DB", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
@@ -149,6 +158,36 @@ namespace ReplicationManagerIU
             }
         }
 
+        private void btnTerminalTest_Click(object sender, EventArgs e)
+        {
+            cbEndPointDatabase.Items.Clear();
+            //Connexion parameters
+            string server = tbEndPointServer.Text;
+            string user = tbEndPointUser.Text;
+            string password = tbEndPointPassword.Text;
+            string port = tbEndPointPort.Text;
+            List<Database> listDatabases = new List<Database>();
+
+            if ((cbEndPointEngine.SelectedItem as Engine).StrName.Contains("SQL Server"))
+            {
+                SqlDatabaseDA sqlDatabaseDA = new SqlDatabaseDA(user, password, server, port);
+                listDatabases = sqlDatabaseDA.GetAllDatabases();
+            }
+
+            if (listDatabases.Count <= 0)
+            {
+                MessageBox.Show("Unable to Connect Using those Credentials", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                foreach (Database db in listDatabases)
+                {
+                    cbEndPointDatabase.Items.Add(db.StrName);
+                }
+                cbEndPointDatabase.SelectedIndex = 0;
+                cbEndPointDatabase.Enabled = true;
+            }
+        }
 
     }
 }
