@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{24EB2B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReplicationManagerDA", "ReplicationManagerDA\ReplicationManagerDA.csproj", "{F728E3D7-D379-40C7-AA4C-646ABCEB51A0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLServerDA", "SQLServerDA\SQLServerDA.csproj", "{1E83B627-3ACE-49F2-8314-3A46EED66BDB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{F728E3D7-D379-40C7-AA4C-646ABCEB51A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F728E3D7-D379-40C7-AA4C-646ABCEB51A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F728E3D7-D379-40C7-AA4C-646ABCEB51A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E83B627-3ACE-49F2-8314-3A46EED66BDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E83B627-3ACE-49F2-8314-3A46EED66BDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E83B627-3ACE-49F2-8314-3A46EED66BDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E83B627-3ACE-49F2-8314-3A46EED66BDB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

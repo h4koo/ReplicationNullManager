@@ -60,10 +60,12 @@
   <ItemGroup>
     <Compile Include="ClasesTipadas\ParamConsultaCT.cs" />
     <Compile Include="Constantes\IConstantes.cs" />
+    <Compile Include="Entities\Database.cs" />
     <Compile Include="Entities\Engine.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Entities\Replica.cs" />
+    <Compile Include="Entities\Table.cs" />
     <Compile Include="LogErrores\LogErrores.cs" />
   </ItemGroup>
   <ItemGroup>

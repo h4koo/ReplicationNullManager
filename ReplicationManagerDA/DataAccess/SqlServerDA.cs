@@ -25,12 +25,13 @@ namespace ReplicationManagerDA
             {
                 _oLogErrors = new LogErrores();
                 //string conexionBD = ConfigurationManager.AppSettings["CargoDispatcherDB"];
-                ConnectionString = "user id=ReplicationManager_su;" +
-                                       "password=12345;server=localhost;" +
-                                       "Trusted_Connection=yes;" +
-                                       "database=ReplicationManager; " +
-                                       "connection timeout=30";
 
+                ConnectionString = "user id=ReplicationManager_su;" +
+                                   "password=12345;server=localhost;" +
+                                   "Trusted_Connection=yes;" +
+                                   "database=ReplicationManager; " +
+                                   "connection timeout=30";
+                
                 //_oConnection = new MySqlConnection(conexionBD);
 
             }
@@ -39,6 +40,29 @@ namespace ReplicationManagerDA
                 _oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message);
             }
         }
+
+        public SqlServerDA(string user, string password, string server, string port, string database="master") {
+            try
+            {
+                _oLogErrors = new LogErrores();
+                //string conexionBD = ConfigurationManager.AppSettings["CargoDispatcherDB"];
+
+                ConnectionString = "Data Source=" + server + "," + port + ";Network Library=DBMSSOCN;Initial Catalog=" + database + ";User ID=" + user + ";Password=" + password + ";Integrated Security = SSPI;";
+
+                //ConnectionString = "user id="+user+";" +
+                //                   "password="+password+";server="+server+";" +
+                //                   "Trusted_Connection=yes;" +
+                //                   "database="+database+";" +
+                //                   "connection timeout=30";
+                //_oConnection = new MySqlConnection(conexionBD);
+
+            }
+            catch (Exception ex)
+            {
+                _oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
         /// <summary>
         /// This method will Open the Connection Required.
         /// Date: 9/4/2014

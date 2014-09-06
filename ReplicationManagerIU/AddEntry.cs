@@ -82,6 +82,73 @@ namespace ReplicationManagerIU
             MessageBox.Show((cbEndPointEngine.SelectedItem as Engine).IntIdEngine.ToString());
         }
 
+        private void bnSourceTest_Click(object sender, EventArgs e)
+        {
+            cbSourceDatabase.Items.Clear();
+            //Connexion parameters
+            string server = tbSourceIPAddress.Text;
+            string user = tbSourceUser.Text;
+            string password = tbSourcePassword.Text;
+            string port = tbSourcePort.Text;
+            List<Database> listDatabases = new List<Database>();
+
+            if ((cbSourceEngine.SelectedItem as Engine).StrName.Contains("SQL Server")){
+
+                SqlDatabaseDA sqlDatabaseDA = new SqlDatabaseDA(user,password,server,port);
+                listDatabases = sqlDatabaseDA.GetAllDatabases();
+            }
+
+            if (listDatabases.Count <= 0)
+            {
+                MessageBox.Show("Unable to Connect Using those Credentials", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else {
+                foreach (Database db in listDatabases){
+                    cbSourceDatabase.Items.Add(db.StrName);
+                }
+                cbSourceDatabase.SelectedIndex = 0; 
+                cbSourceDatabase.Enabled = true;
+            }
+        }
+
+        private void cbSourceDatabase_SelectedValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbSourceDatabase_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            cbSourceTable.Items.Clear();
+            //Connexion parameters
+            string server = tbSourceIPAddress.Text;
+            string user = tbSourceUser.Text;
+            string password = tbSourcePassword.Text;
+            string port = tbSourcePort.Text;
+            string database = cbSourceDatabase.SelectedItem.ToString();
+            List<Table> listTables = new List<Table>();
+
+            if ((cbSourceEngine.SelectedItem as Engine).StrName.Contains("SQL Server"))
+            {
+
+                SqlDatabaseDA sqlDatabaseDA = new SqlDatabaseDA(user, password, server, port, database);
+                listTables = sqlDatabaseDA.GetAllTables(database);
+            }
+
+            if (listTables.Count <= 0)
+            {
+                MessageBox.Show("Unable to Connect Using those Credentials", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                foreach (Table tbl in listTables)
+                {
+                    cbSourceTable.Items.Add(tbl.StrName);
+                }
+                cbSourceTable.SelectedIndex = 0;
+                cbSourceTable.Enabled = true;
+            }
+        }
+
 
     }
 }

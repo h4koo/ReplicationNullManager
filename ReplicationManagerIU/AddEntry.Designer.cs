@@ -35,6 +35,7 @@
             this.lbSourceDBName = new System.Windows.Forms.Label();
             this.lbSourceUser = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.bnSourceTest = new System.Windows.Forms.Button();
             this.tbSourcePort = new System.Windows.Forms.TextBox();
             this.lbSourcePort = new System.Windows.Forms.Label();
             this.cbSourceTable = new System.Windows.Forms.ComboBox();
@@ -99,7 +100,7 @@
             // 
             this.lbSourceDBName.AutoSize = true;
             this.lbSourceDBName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbSourceDBName.Location = new System.Drawing.Point(6, 228);
+            this.lbSourceDBName.Location = new System.Drawing.Point(6, 272);
             this.lbSourceDBName.Name = "lbSourceDBName";
             this.lbSourceDBName.Size = new System.Drawing.Size(83, 20);
             this.lbSourceDBName.TabIndex = 3;
@@ -117,6 +118,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.bnSourceTest);
             this.groupBox1.Controls.Add(this.tbSourcePort);
             this.groupBox1.Controls.Add(this.lbSourcePort);
             this.groupBox1.Controls.Add(this.cbSourceTable);
@@ -134,10 +136,20 @@
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(330, 331);
+            this.groupBox1.Size = new System.Drawing.Size(330, 364);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Source";
+            // 
+            // bnSourceTest
+            // 
+            this.bnSourceTest.Location = new System.Drawing.Point(150, 219);
+            this.bnSourceTest.Name = "bnSourceTest";
+            this.bnSourceTest.Size = new System.Drawing.Size(78, 30);
+            this.bnSourceTest.TabIndex = 14;
+            this.bnSourceTest.Text = "Test";
+            this.bnSourceTest.UseVisualStyleBackColor = true;
+            this.bnSourceTest.Click += new System.EventHandler(this.bnSourceTest_Click);
             // 
             // tbSourcePort
             // 
@@ -160,18 +172,21 @@
             // cbSourceTable
             // 
             this.cbSourceTable.FormattingEnabled = true;
-            this.cbSourceTable.Location = new System.Drawing.Point(130, 268);
+            this.cbSourceTable.Location = new System.Drawing.Point(130, 312);
             this.cbSourceTable.Name = "cbSourceTable";
             this.cbSourceTable.Size = new System.Drawing.Size(121, 28);
             this.cbSourceTable.TabIndex = 11;
             // 
             // cbSourceDatabase
             // 
+            this.cbSourceDatabase.Enabled = false;
             this.cbSourceDatabase.FormattingEnabled = true;
-            this.cbSourceDatabase.Location = new System.Drawing.Point(130, 230);
+            this.cbSourceDatabase.Location = new System.Drawing.Point(130, 274);
             this.cbSourceDatabase.Name = "cbSourceDatabase";
             this.cbSourceDatabase.Size = new System.Drawing.Size(121, 28);
             this.cbSourceDatabase.TabIndex = 10;
+            this.cbSourceDatabase.SelectedIndexChanged += new System.EventHandler(this.cbSourceDatabase_SelectedIndexChanged);
+            this.cbSourceDatabase.SelectedValueChanged += new System.EventHandler(this.cbSourceDatabase_SelectedValueChanged);
             // 
             // tbSourcePassword
             // 
@@ -199,7 +214,7 @@
             // 
             this.lbSourceTable.AutoSize = true;
             this.lbSourceTable.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbSourceTable.Location = new System.Drawing.Point(6, 266);
+            this.lbSourceTable.Location = new System.Drawing.Point(6, 310);
             this.lbSourceTable.Name = "lbSourceTable";
             this.lbSourceTable.Size = new System.Drawing.Size(52, 20);
             this.lbSourceTable.TabIndex = 6;
@@ -405,5 +420,6 @@
         private System.Windows.Forms.Label lbEndPointPort;
         private System.Windows.Forms.TextBox tbSourcePort;
         private System.Windows.Forms.Label lbSourcePort;
+        private System.Windows.Forms.Button bnSourceTest;
     }
 }
