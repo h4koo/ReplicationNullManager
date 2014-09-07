@@ -126,6 +126,11 @@ namespace ReplicationManagerIU
                 SqlDatabaseDA sqlDatabaseDA = new SqlDatabaseDA(user,password,server,port);
                 listDatabases = sqlDatabaseDA.GetAllDatabases();
             }
+            if ((cbSourceEngine.SelectedItem as Engine).StrName.Contains("MySQL"))
+            {
+                MysqlDatabaseDA sqlDatabaseDA = new MysqlDatabaseDA(user, password, server, port);
+                listDatabases = sqlDatabaseDA.GetAllDatabases();
+            }
 
             if (listDatabases.Count <= 0)
             {
@@ -168,6 +173,13 @@ namespace ReplicationManagerIU
                 SqlDatabaseDA sqlDatabaseDA = new SqlDatabaseDA(user, password, server, port, database);
                 listTables = sqlDatabaseDA.GetAllTables(database);
             }
+            if ((cbSourceEngine.SelectedItem as Engine).StrName.Contains("MySQL"))
+            {
+
+                MysqlDatabaseDA sqlDatabaseDA = new MysqlDatabaseDA(user, password, server, port, database);
+                listTables = sqlDatabaseDA.GetAllTables(database);
+            }
+
 
             if (listTables.Count <= 0)
             {
@@ -199,7 +211,11 @@ namespace ReplicationManagerIU
                 SqlDatabaseDA sqlDatabaseDA = new SqlDatabaseDA(user, password, server, port);
                 listDatabases = sqlDatabaseDA.GetAllDatabases();
             }
-
+            if ((cbEndPointEngine.SelectedItem as Engine).StrName.Contains("MySQL"))
+            {
+                MysqlDatabaseDA sqlDatabaseDA = new MysqlDatabaseDA(user, password, server, port);
+                listDatabases = sqlDatabaseDA.GetAllDatabases();
+            }
             if (listDatabases.Count <= 0)
             {
                 MessageBox.Show("Unable to Connect Using those Credentials", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

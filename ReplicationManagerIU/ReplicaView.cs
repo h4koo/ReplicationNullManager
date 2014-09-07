@@ -62,7 +62,7 @@ namespace ReplicationManagerIU
             SourceEngine = replica.StrSourceEngine;
             SourceIPAddress = replica.StrSourceIPAddress;
             SourcePort = replica.IntSourcePort;
-            SourceUser = replica.StrSourcePassword;
+            SourceUser = replica.StrSourceUser;
             SourcePassword = replica.StrSourcePassword;
             SourceDatabase = replica.StrSourceDatabase;
             SourceTable = replica.StrSourceTable;
