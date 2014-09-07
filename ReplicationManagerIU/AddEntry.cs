@@ -117,11 +117,20 @@ namespace ReplicationManagerIU
                 SqlDatabaseDA sqlDatabaseAccess = new SqlDatabaseDA(replica.StrSourceUser, replica.StrSourcePassword, replica.StrSourceIPAddress, replica.IntSourcePort.ToString(), replica.StrSourceDatabase);
                 sqlDatabaseAccess.CreateReplicaLogs();
             }
-
+            if (replica.StrSourceEngine.Contains("MySQL"))
+            {
+                MysqlDatabaseDA sqlDatabaseAccess = new MysqlDatabaseDA(replica.StrSourceUser, replica.StrSourcePassword, replica.StrSourceIPAddress, replica.IntSourcePort.ToString(), replica.StrSourceDatabase);
+                sqlDatabaseAccess.CreateReplicaLogs();
+            }
             //Terminal Config
             if (replica.StrTerminalEngine.Contains("SQL Server"))
             {
                 SqlDatabaseDA sqlDatabaseAccess = new SqlDatabaseDA(replica.StrTerminalUser , replica.StrTerminalPassword, replica.StrTerminalIPAddress, replica.IntTerminalPort.ToString(), replica.StrTerminalDatabase);
+                sqlDatabaseAccess.CreateReplicaLogs();
+            }
+            if (replica.StrTerminalEngine.Contains("MySQL"))
+            {
+                MysqlDatabaseDA sqlDatabaseAccess = new MysqlDatabaseDA(replica.StrTerminalUser, replica.StrTerminalPassword, replica.StrTerminalIPAddress, replica.IntTerminalPort.ToString(), replica.StrTerminalDatabase);
                 sqlDatabaseAccess.CreateReplicaLogs();
             }
         }

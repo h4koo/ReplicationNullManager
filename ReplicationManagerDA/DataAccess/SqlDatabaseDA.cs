@@ -134,8 +134,8 @@ namespace ReplicationManagerDA.DataAccess
             try
             {
                 this.OpenConnection();
-                strQuery = "IF NOT EXISTS (SELECT * FROM sysobjects WHERE id = object_id(N'[dbo].[ReplicaLogs]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)" +
-                           "CREATE TABLE [dbo].[ReplicaLogs](" +
+                strQuery = "IF NOT EXISTS (SELECT * FROM sysobjects WHERE id = object_id(N'[dbo].[ReplicaLog]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)" +
+                           "CREATE TABLE [dbo].[ReplicaLog](" +
                                          "[idReplicaLog] [int] IDENTITY(1,1) NOT NULL," +
                                          "[ReplicaTable] [nchar](30) NOT NULL," +
                                          "[ReplicaDatetime] [datetime] NOT NULL," +
