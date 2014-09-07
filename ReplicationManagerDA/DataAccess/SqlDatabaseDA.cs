@@ -123,5 +123,39 @@ namespace ReplicationManagerDA.DataAccess
             return listResult;
             
         }
+        /// <summary>
+        /// If not already exist it will create the LogReplicaTable on the Engine
+        /// This cannot be a SP since it will run on a Client DB, SQL Embedded
+        /// </summary>
+        /// <returns></returns>
+        public Boolean CreateReplicaLogs() {
+            Boolean result = false;
+            string strQuery = string.Empty;
+            try
+            {
+                this.OpenConnection();
+                strQuery = "IF NOT EXISTS (SELECT * FROM sysobjects WHERE id = object_id(N'[dbo].[ReplicaLogs]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)" +
+                           "CREATE TABLE [dbo].[ReplicaLogs](" +
+                                         "[idReplicaLog] [int] IDENTITY(1,1) NOT NULL," +
+                                         "[ReplicaTable] [nchar](30) NOT NULL," +
+                                         "[ReplicaDatetime] [datetime] NOT NULL," +
+                                         "[ReplicaTransaction] [nchar](100) NOT NULL" +
+                                         ") ON [PRIMARY]";
+
+                SqlCommand cmdComando = new SqlCommand(strQuery, this._oConnection);
+                cmdComando.ExecuteNonQuery();
+                result = true;
+            
+            }
+            catch (Exception ex)
+            {
+                this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, strQuery);
+            }
+            finally {
+                this.CloseConnection();            
+            }
+            return result;
+        }
+        
     }
 }

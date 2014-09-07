@@ -100,9 +100,30 @@ namespace ReplicationManagerIU
             newReplica.StrTerminalDatabase = cbEndPointDatabase.Text;
             ReplicaDA replicaDA = new ReplicaDA();
             replicaDA.Insert(newReplica);
+            InitialReplicaClientConfig(newReplica);
             this.Close();
+
+
             //MessageBox.Show((cbEndPointEngine.SelectedItem as Engine).IntIdEngine.ToString());
             
+        }
+        /// <summary>
+        /// This will configure the Initial Replica requirements on the client
+        /// </summary>
+        /// <param name="replica"></param>
+        public void InitialReplicaClientConfig(Replica replica){
+            //Source Config
+            if (replica.StrSourceEngine.Contains("SQL Server")){
+                SqlDatabaseDA sqlDatabaseAccess = new SqlDatabaseDA(replica.StrSourceUser, replica.StrSourcePassword, replica.StrSourceIPAddress, replica.IntSourcePort.ToString(), replica.StrSourceDatabase);
+                sqlDatabaseAccess.CreateReplicaLogs();
+            }
+
+            //Terminal Config
+            if (replica.StrTerminalEngine.Contains("SQL Server"))
+            {
+                SqlDatabaseDA sqlDatabaseAccess = new SqlDatabaseDA(replica.StrTerminalUser , replica.StrTerminalPassword, replica.StrTerminalIPAddress, replica.IntTerminalPort.ToString(), replica.StrTerminalDatabase);
+                sqlDatabaseAccess.CreateReplicaLogs();
+            }
         }
         /// <summary>
         /// Test Conection in order to get the Complete DB list on the Engine
