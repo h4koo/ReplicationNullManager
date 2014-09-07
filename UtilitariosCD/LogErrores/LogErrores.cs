@@ -37,9 +37,18 @@ namespace UtilitariosCD.LogErrores
             try
             {                
                 //Armamos la ruta donde se guardará el log con la fecha actual
-                strRutaLog += ConfigurationManager.AppSettings["RutaLogErrores"];
-                strRutaLog += "LogErrores_" + ObtenerNombreCapa(pintTipoCapa) + " ";
-                strRutaLog += DateTime.Now.ToString("dd-MMM-yyyy") + ".txt";
+                
+                strRutaLog += Settings.Default.LogDirectory.ToString();
+                if ((strRutaLog == null) || (strRutaLog == "")){
+                    strRutaLog = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+                    Settings.Default.LogDirectory = strRutaLog;
+                    Settings.Default.Save();
+                    
+                }
+                string fileName = "LogErrores_" + ObtenerNombreCapa(pintTipoCapa) + "_" + DateTime.Now.ToString("dd-MMM-yyyy") + ".txt";
+                Settings.Default.LastLogName = fileName;
+                Settings.Default.Save();
+                strRutaLog += "\\"+fileName;
 
                 //Construimos el mensaje de error
                 strMsjLog += " ********************************************************************" + Environment.NewLine;
@@ -51,6 +60,9 @@ namespace UtilitariosCD.LogErrores
 
 
                 //Guardamos el archivo
+                
+                
+                //string test2 = System.IO.Path.GetDirectoryName;
                 System.IO.File.AppendAllText(@strRutaLog, strMsjLog);
 
             }
@@ -83,10 +95,18 @@ namespace UtilitariosCD.LogErrores
             try
             {
                 //Armamos la ruta donde se guardará el log con la fecha actual
-                strRutaLog = ConfigurationManager.AppSettings["RutaLogErrores"];
-                strRutaLog += "LogErrores_" + ObtenerNombreCapa(pintTipoCapa) + " ";
-                strRutaLog += DateTime.Now.ToString("dd-MMM-yyyy") + ".txt";
+                strRutaLog += Settings.Default.LogDirectory.ToString();
+                if ((strRutaLog == null) || (strRutaLog == ""))
+                {
+                    strRutaLog = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+                    Settings.Default.LogDirectory = strRutaLog;
+                    Settings.Default.Save();
 
+                }
+                string fileName = "LogErrores_" + ObtenerNombreCapa(pintTipoCapa) + "_" + DateTime.Now.ToString("dd-MMM-yyyy") + ".txt";
+                Settings.Default.LastLogName = fileName;
+                Settings.Default.Save();
+                strRutaLog += "\\" + fileName;
                 //Construimos el mensaje de error
                 strMsjLog += " ********************************************************************" + Environment.NewLine;
                 strMsjLog += " * Fecha y hora: " + DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss") + Environment.NewLine;
@@ -113,7 +133,9 @@ namespace UtilitariosCD.LogErrores
             }
 
         }
-
+        public string LogLocation() {
+            return Settings.Default.LogDirectory + "\\" + Settings.Default.LastLogName;
+        }
         #endregion
 
 

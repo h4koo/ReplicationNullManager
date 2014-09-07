@@ -56,8 +56,13 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+    <None Include="Settings.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App.cs" />
     <Compile Include="ClasesTipadas\ParamConsultaCT.cs" />
     <Compile Include="Constantes\IConstantes.cs" />
     <Compile Include="Entities\Database.cs" />
@@ -67,6 +72,11 @@
     <Compile Include="Entities\Replica.cs" />
     <Compile Include="Entities\Table.cs" />
     <Compile Include="LogErrores\LogErrores.cs" />
+    <Compile Include="Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">

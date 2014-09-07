@@ -118,5 +118,12 @@ namespace ReplicationManagerIU
         {
             Reload_Replicas();
         }
+
+        private void btnLog_Click(object sender, EventArgs e)
+        {
+            LogViewer logViewer = new LogViewer();
+            logViewer.Show();
+        
+        }
     }
 }

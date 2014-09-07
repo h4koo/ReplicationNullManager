@@ -33,6 +33,7 @@
             this.btnEnableDisable = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
+            this.btnLog = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.DGVReplicatorData)).BeginInit();
             this.SuspendLayout();
             // 
@@ -88,11 +89,22 @@
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
+            // btnLog
+            // 
+            this.btnLog.Location = new System.Drawing.Point(554, 197);
+            this.btnLog.Name = "btnLog";
+            this.btnLog.Size = new System.Drawing.Size(75, 23);
+            this.btnLog.TabIndex = 5;
+            this.btnLog.Text = "Log";
+            this.btnLog.UseVisualStyleBackColor = true;
+            this.btnLog.Click += new System.EventHandler(this.btnLog_Click);
+            // 
             // Core
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1104, 243);
+            this.Controls.Add(this.btnLog);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.btnEnableDisable);
@@ -114,6 +126,7 @@
         private System.Windows.Forms.Button btnEnableDisable;
         private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.Button btnDelete;
+        private System.Windows.Forms.Button btnLog;
 
     }
 }
