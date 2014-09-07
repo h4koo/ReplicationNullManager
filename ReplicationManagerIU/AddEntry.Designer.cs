@@ -51,7 +51,7 @@
             this.cbEndPointDatabase = new System.Windows.Forms.ComboBox();
             this.tbEndPointPassword = new System.Windows.Forms.TextBox();
             this.tbEndPointUser = new System.Windows.Forms.TextBox();
-            this.tbEndPointServer = new System.Windows.Forms.TextBox();
+            this.tbEndPointIPAddress = new System.Windows.Forms.TextBox();
             this.lbEndPointPassword = new System.Windows.Forms.Label();
             this.lbEngineEndPoint = new System.Windows.Forms.Label();
             this.lbEndPointDatabase = new System.Windows.Forms.Label();
@@ -240,7 +240,7 @@
             this.gbEndPoint.Controls.Add(this.cbEndPointDatabase);
             this.gbEndPoint.Controls.Add(this.tbEndPointPassword);
             this.gbEndPoint.Controls.Add(this.tbEndPointUser);
-            this.gbEndPoint.Controls.Add(this.tbEndPointServer);
+            this.gbEndPoint.Controls.Add(this.tbEndPointIPAddress);
             this.gbEndPoint.Controls.Add(this.lbEndPointPassword);
             this.gbEndPoint.Controls.Add(this.lbEngineEndPoint);
             this.gbEndPoint.Controls.Add(this.lbEndPointDatabase);
@@ -279,7 +279,7 @@
             this.cbEndPointDatabase.FormattingEnabled = true;
             this.cbEndPointDatabase.Location = new System.Drawing.Point(138, 276);
             this.cbEndPointDatabase.Name = "cbEndPointDatabase";
-            this.cbEndPointDatabase.Size = new System.Drawing.Size(121, 28);
+            this.cbEndPointDatabase.Size = new System.Drawing.Size(191, 28);
             this.cbEndPointDatabase.TabIndex = 10;
             // 
             // tbEndPointPassword
@@ -297,12 +297,12 @@
             this.tbEndPointUser.Size = new System.Drawing.Size(199, 26);
             this.tbEndPointUser.TabIndex = 8;
             // 
-            // tbEndPointServer
+            // tbEndPointIPAddress
             // 
-            this.tbEndPointServer.Location = new System.Drawing.Point(130, 69);
-            this.tbEndPointServer.Name = "tbEndPointServer";
-            this.tbEndPointServer.Size = new System.Drawing.Size(199, 26);
-            this.tbEndPointServer.TabIndex = 7;
+            this.tbEndPointIPAddress.Location = new System.Drawing.Point(130, 69);
+            this.tbEndPointIPAddress.Name = "tbEndPointIPAddress";
+            this.tbEndPointIPAddress.Size = new System.Drawing.Size(199, 26);
+            this.tbEndPointIPAddress.TabIndex = 7;
             // 
             // lbEndPointPassword
             // 
@@ -374,7 +374,7 @@
             // 
             // btnTerminalTest
             // 
-            this.btnTerminalTest.Location = new System.Drawing.Point(130, 222);
+            this.btnTerminalTest.Location = new System.Drawing.Point(197, 222);
             this.btnTerminalTest.Name = "btnTerminalTest";
             this.btnTerminalTest.Size = new System.Drawing.Size(78, 30);
             this.btnTerminalTest.TabIndex = 15;
@@ -423,7 +423,7 @@
         private System.Windows.Forms.ComboBox cbEndPointDatabase;
         private System.Windows.Forms.TextBox tbEndPointPassword;
         private System.Windows.Forms.TextBox tbEndPointUser;
-        private System.Windows.Forms.TextBox tbEndPointServer;
+        private System.Windows.Forms.TextBox tbEndPointIPAddress;
         private System.Windows.Forms.Label lbEndPointPassword;
         private System.Windows.Forms.Label lbEngineEndPoint;
         private System.Windows.Forms.Label lbEndPointDatabase;

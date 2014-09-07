@@ -70,11 +70,15 @@ namespace ReplicationManagerIU
                 DGVReplicatorData.Columns["Created"].DisplayIndex = 14;
                 DGVReplicatorData.Columns["LastCheckOnSource"].DisplayIndex = 15;
                 DGVReplicatorData.Columns["LastCheckOnTerminal"].DisplayIndex = 16;
-
+                btnDelete.Enabled = true;
+                btnEnableDisable.Enabled = true;
             }
             else
             {
                 MessageBox.Show("Replicas Not Found", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                btnDelete.Enabled = false;
+                btnEnableDisable.Enabled = false;
+                DGVReplicatorData.DataSource = null;
             }
         }
 
@@ -98,6 +102,19 @@ namespace ReplicationManagerIU
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            Reload_Replicas();
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            int idReplica = replicas[DGVReplicatorData.CurrentCell.RowIndex].IntIdReplica;
+            ReplicaDA replicaDA = new ReplicaDA();
+            replicaDA.Delete( idReplica );
+            Reload_Replicas();
+        }
+
+        private void Core_VisibleChanged(object sender, EventArgs e)
         {
             Reload_Replicas();
         }

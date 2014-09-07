@@ -79,7 +79,30 @@ namespace ReplicationManagerIU
 
         private void btnAddEntry_Click(object sender, EventArgs e)
         {
-            MessageBox.Show((cbEndPointEngine.SelectedItem as Engine).IntIdEngine.ToString());
+            Replica newReplica = new Replica();
+            
+            //Getting all Source Information
+            newReplica.IntIdSourceEngine = (cbSourceEngine.SelectedItem as Engine).IntIdEngine;
+            newReplica.StrSourceEngine = (cbSourceEngine.SelectedItem as Engine).StrName;
+            newReplica.IntSourcePort = Convert.ToInt32(tbSourcePort.Text);
+            newReplica.StrSourceIPAddress = tbSourceIPAddress.Text;
+            newReplica.StrSourceUser = tbSourceUser.Text;
+            newReplica.StrSourcePassword = tbSourcePassword.Text;
+            newReplica.StrSourceDatabase = cbSourceDatabase.Text;
+            newReplica.StrSourceTable = cbSourceTable.Text;
+            //Getting all Terminal Information
+            newReplica.IntIdTerminalEngine = (cbEndPointEngine.SelectedItem as Engine).IntIdEngine;
+            newReplica.StrTerminalEngine = (cbEndPointEngine.SelectedItem as Engine).StrName;
+            newReplica.IntTerminalPort = Convert.ToInt32(tbEndPointPort.Text);
+            newReplica.StrTerminalIPAddress = tbEndPointIPAddress.Text;
+            newReplica.StrTerminalUser = tbEndPointUser.Text;
+            newReplica.StrTerminalPassword = tbEndPointPassword.Text;
+            newReplica.StrTerminalDatabase = cbEndPointDatabase.Text;
+            ReplicaDA replicaDA = new ReplicaDA();
+            replicaDA.Insert(newReplica);
+            this.Close();
+            //MessageBox.Show((cbEndPointEngine.SelectedItem as Engine).IntIdEngine.ToString());
+            
         }
         /// <summary>
         /// Test Conection in order to get the Complete DB list on the Engine
@@ -89,6 +112,8 @@ namespace ReplicationManagerIU
         private void bnSourceTest_Click(object sender, EventArgs e)
         {
             cbSourceDatabase.Items.Clear();
+            cbSourceDatabase.Enabled = false;
+            cbSourceDatabase.Text = "";
             //Connexion parameters
             string server = tbSourceIPAddress.Text;
             string user = tbSourceUser.Text;
@@ -128,6 +153,7 @@ namespace ReplicationManagerIU
         {
             cbSourceTable.Items.Clear();
             cbSourceTable.Text = "";
+            cbSourceTable.Enabled = false;
             //Connexion parameters
             string server = tbSourceIPAddress.Text;
             string user = tbSourceUser.Text;
@@ -162,7 +188,7 @@ namespace ReplicationManagerIU
         {
             cbEndPointDatabase.Items.Clear();
             //Connexion parameters
-            string server = tbEndPointServer.Text;
+            string server = tbEndPointIPAddress.Text;
             string user = tbEndPointUser.Text;
             string password = tbEndPointPassword.Text;
             string port = tbEndPointPort.Text;
