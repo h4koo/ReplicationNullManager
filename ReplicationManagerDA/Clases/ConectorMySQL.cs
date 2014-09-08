@@ -9,7 +9,7 @@ using System.Data;
 
 namespace ReplicationManagerAD.Clases
 {
-    class Conector
+    class ConectorMySQL
     {
 
         #region Variables
@@ -27,7 +27,7 @@ namespace ReplicationManagerAD.Clases
             private string strError   =    "Error";
         #endregion
 
-        public Conector(string pServidor, string pPuerto, string pNombreBase, string pAdministrador, string pPassword)
+        public ConectorMySQL(string pServidor, string pPuerto, string pNombreBase, string pAdministrador, string pPassword)
         {
             mscConexion     =   new MySqlConnection();
             strServidor     =   pServidor;
