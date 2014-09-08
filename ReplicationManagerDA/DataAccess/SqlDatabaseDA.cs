@@ -71,11 +71,18 @@ namespace ReplicationManagerDA.DataAccess
             }
             return listResult;
         }
+
+
+
+
         /// <summary>
         /// This method will retrieve all the Tables for and specific DB on SQL, this cannot be a SP because is on client side
         /// </summary>
         /// <param name="Database"></param>
         /// <returns></returns>
+        /// 
+        /// ****method should return the list of tables that are going to be replicated from the ReplicationManager internal tables
+        /// **** needs to be modified so it does't get al tables, but the tables to be replicated
         public List<Table> GetAllTables(string Database) {
             List<Table> listResult = new List<Table>();
             Table oTable = new Table();
@@ -88,9 +95,12 @@ namespace ReplicationManagerDA.DataAccess
             {
                 this.OpenConnection();
 
-                strQuery = "sp_tables"; 
+                //modified string to use sys.tables (assumes the "USE 'Database'" is correct (should be the internal
+                //replication database), the use statement should be correct from the connection string, where the 
+                //database to use is selected
+                strQuery = "SELECT SourceTable FROM Replication WHERE SourceDatabase= '"+ Database+ "'"; 
                 SqlCommand cmdComando = new SqlCommand(strQuery, this._oConnection);
-                cmdComando.CommandType = CommandType.StoredProcedure;
+//                cmdComando.CommandType = CommandType.StoredProcedure;
 
                 //cmdComando.Parameters.Add("@intResult", SqlDbType.Int).Direction = ParameterDirection.Output;
 
@@ -100,17 +110,22 @@ namespace ReplicationManagerDA.DataAccess
                 //Load the Results on the DataTable
                 dtResult.Load(dtrResult);
 
-                foreach (DataRow dtrFila in dtResult.Rows)
+//                foreach (DataRow dtrFila in dtResult.Rows)
+
+                //modified to only use the Reader since only one column needed
+                while(dtrResult.Read())
                 {
 
-                    if (dtrFila["TABLE_TYPE"].ToString().Equals("TABLE"))
-                    {
+//                    if (dtrFila["TABLE_TYPE"].ToString().Equals("TABLE"))
+//                    {
                         oTable = new Table();
-                        oTable.StrName = dtrFila["TABLE_NAME"].ToString();
+                        oTable.StrName = dtrResult.GetString(0);
                         listResult.Add(oTable);
-                    }
+//                    }
 
                 }
+
+                dtrResult.Close();
             }
             catch (Exception ex)
             {
@@ -118,11 +133,81 @@ namespace ReplicationManagerDA.DataAccess
             }
             finally
             {
+                
                 this.CloseConnection();
             }
             return listResult;
             
         }
+
+
+        //creates the destination tables on the destination databse according to the metadata 
+        //retrieved from the source datbase for the replication tables
+        public void createDestinationTables(string dbName) {
+            OpenConnection();
+
+            var TableNames = GetAllTables(dbName);
+//                new List<string>();
+          
+//            SqlConnection dbConnection= _oConnection;
+//            {
+//                var cmd =
+//                    new SqlCommand("SELECT Table_Name FROM information_schema.tables WHERE table_name LIKE 'mavara%'",
+//                        dbConnection);
+//                SqlDataReader reader = cmd.ExecuteReader();
+//
+//                while(reader.Read()) {
+//                    TableNames.Add(reader[0].ToString());
+//                }
+//                reader.Close();
+//            }
+
+
+            //gets all columns for each table
+            foreach(Table tableName in TableNames) {
+                var cmd =
+                    new SqlCommand(
+                        "SELECT column_name, data_type, character_maximum_length" +
+                            "FROM INFORMATION_SCHEMA.COLUMNS" +
+                            "WHERE TABLE_NAME = '" +
+                        tableName.StrName + "'", _oConnection);
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                var Columns = new List<string[]>();
+                while(reader.Read()) {
+                    var column = new string[3];
+                    column[0] = reader[0].ToString();
+                    column[1] = reader[1].ToString();
+                    column[2] = reader[2].ToString();
+                    Columns.Add(column);
+                }
+
+                reader.Close();
+
+                // create tables in the destination database
+                //formats the insert for mysql insertion
+                string queryCreatTables = "CREATE TABLE " + tableName + " (\n";
+                foreach(var cols in Columns) {
+                    queryCreatTables += cols[0] + " " + cols[1] ;
+                    if(cols[2]!="NULL" && cols[2]!="-1")
+                        queryCreatTables += "("+cols[2]+")";//sets specified size
+                    if(cols[3] == "NO")
+                        queryCreatTables += " NOT NULL";
+                    // else
+                    //   queryCreatTables += "NULL";
+                    queryCreatTables += " ,\n ";
+                }
+                queryCreatTables += ")";
+
+                var smd =
+                    new SqlCommand(queryCreatTables, _oConnection);
+                SqlDataReader sreader = smd.ExecuteReader();
+                sreader.Close();
+            }
+        }
+
+
+
         /// <summary>
         /// If not already exist it will create the LogReplicaTable on the Engine
         /// This cannot be a SP since it will run on a Client DB, SQL Embedded
