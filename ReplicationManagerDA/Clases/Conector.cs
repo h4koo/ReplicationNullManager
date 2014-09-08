@@ -116,11 +116,10 @@ namespace ReplicationManagerAD.Clases
             List<string> resultado = new List<string>();
             try {
                 MySqlCommand comando = new MySqlCommand(String.Format("mostrarBases"), mscConexion);
-
-                abrirConexionBase();
+              
                 comando.CommandType = CommandType.StoredProcedure;
 
-                
+                abrirConexionBase();
                 MySqlDataReader lector = comando.ExecuteReader();
                 
                  while(lector.Read()){
