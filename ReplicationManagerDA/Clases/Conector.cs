@@ -251,7 +251,38 @@ namespace ReplicationManagerAD.Clases
             }
             
         }//END OBTENER NOMBRE COLUMNAS
-        
+
+        /// <summary>
+        /// Crea una tabla a la base de datos.
+        /// </summary>
+        /// <param name="pNombre"></param>
+        /// <param name="pColumnas"></param>
+        /// <param name="pTipo"></param>
+        /// <returns></returns>
+        public string crearTabla(string pNombre, List<string> pColumnas, List<string> pTipo)
+        {
+
+            string strQuerry = "create table " + pNombre + " (";
+            for (int indice = 0; indice < pColumnas.Count; indice++)
+            {
+                strQuerry += pColumnas[indice] + " " + pTipo[indice] + " NOT NULL,";
+            }
+            strQuerry += "primary key(" + pColumnas[0] + "));";
+            try
+            {
+                abrirConexionBase();
+                MySqlCommand comando = new MySqlCommand(string.Format(strQuerry), mscConexion);
+                comando.ExecuteNonQuery();
+                cerrarConexionBase();
+
+                return "Exitosa";
+            }
+            catch (Exception error)
+            {
+                return error.Message;
+            }
+        }
+
         #region Getter and Setters
             
             public string getNombreBase(){
