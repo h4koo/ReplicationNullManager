@@ -355,6 +355,48 @@ namespace ReplicationManagerAD.Clases
             }
         }
 
+        /// <summary>
+        /// Elimina los datos deseados en la base de datos
+        /// </summary>
+        /// <param name="pNombreTabla"></param>
+        /// <param name="pID"></param>
+        /// <returns></returns>
+        public string borrarRegistros(string pNombreTabla, List<string> pID)
+        {
+            string strLlavePrimaria = solicitarLlavePrimaria(pNombreTabla);
+            string strQuerry = "DELETE FROM " + pNombreTabla + " WHERE ";
+            char[] caracter_A_eliminar = { ',', ' ', 'O', 'R' };
+
+            for (int indice = 0; indice < pID.Count; indice++)
+            {
+                strQuerry += strLlavePrimaria + " = " + pID[indice] + " OR ";
+            }
+
+            strQuerry = strQuerry.TrimEnd(caracter_A_eliminar) + ";";
+            return borrarRegistro_Aux(strQuerry);
+        }//END BORRAR REGISTRO
+
+        /// <summary>
+        /// Ejecuta el querry de borrado en la base de datos recibido por parametro
+        /// </summary>
+        /// <param name="pQuerry"></param>
+        /// <returns></returns>
+        private string borrarRegistro_Aux(string pQuerry)
+        {
+            try
+            {
+                abrirConexionBase();
+                MySqlCommand comando = new MySqlCommand(string.Format(pQuerry), mscConexion);
+                comando.ExecuteNonQuery();
+                cerrarConexionBase();
+                return "Exitosa";
+            }
+            catch (Exception error)
+            {
+                return error.Message;
+            }
+        }//END BORRAR REGISTROS AUX
+
         #region Getter and Setters
             
             public string getNombreBase(){
