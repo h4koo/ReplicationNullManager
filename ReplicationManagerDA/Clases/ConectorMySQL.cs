@@ -41,7 +41,7 @@ namespace ReplicationManagerAD.Clases
         /// Inserta una persona a la tabla persona
         /// </summary>
         /// <param name="pID"></param>
-        /// <param name="pNombre"></param>
+        /// <param name="pNombreTabla"></param>
         /// <returns></returns>
         private int agregar(int pID, string pNombre, string pNombreTabla)
         {
@@ -255,7 +255,7 @@ namespace ReplicationManagerAD.Clases
         /// <summary>
         /// Crea una tabla a la base de datos.
         /// </summary>
-        /// <param name="pNombre"></param>
+        /// <param name="pNombreTabla"></param>
         /// <param name="pColumnas"></param>
         /// <param name="pTipo"></param>
         /// <returns></returns>
@@ -275,6 +275,78 @@ namespace ReplicationManagerAD.Clases
                 comando.ExecuteNonQuery();
                 cerrarConexionBase();
 
+                return "Exitosa";
+            }
+            catch (Exception error)
+            {
+                return error.Message;
+            }
+        }
+
+        /// <summary>
+        /// Retorna el nombre de la llave primaria de la relacion ingresada como parametro
+        /// WEB: http://stackoverflow.com/questions/20447374/mysql-using-select-where-primary-key-xyz
+        /// WEB_AUX: http://www.codeproject.com/Articles/36484/Working-C-code-for-MySql-Stored-Procedures-IN-OUT
+        /// </summary>
+        /// <param name="pNombreTabla"></param>
+        /// <returns></returns>
+        private string solicitarLlavePrimaria(string pNombreTabla)
+        {
+            string resultado = "";
+            try
+            {
+                abrirConexionBase();
+                MySqlCommand comando = new MySqlCommand(String.Format("solicitarLlavePrimaria"), mscConexion);
+                comando.CommandType = CommandType.StoredProcedure;
+                comando.Parameters.AddWithValue("@nombreTablaIngresada", pNombreTabla);
+
+                resultado = (string)comando.ExecuteScalar();
+                return resultado;
+            }
+            catch (Exception error)
+            {
+                return error.Message;
+            }
+        }
+
+        /// <summary>
+        /// Se encarga de generar el querry para llamar a un metodo auxiliar que actualiza los datos en la base de datos
+        /// </summary>
+        /// <param name="pNombreTabla"></param>
+        /// <param name="pColumnas"></param>
+        /// <param name="pValores"></param>
+        /// <param name="pID"></param>
+        /// <returns></returns>
+        public string actualizarDato(string pNombreTabla, List<string> pColumnas, List<string> pValores, int pID)
+        {
+
+            string strQuerry = "UPDATE " + pNombreTabla + " SET ";
+            string llavePrimaria = solicitarLlavePrimaria(pNombreTabla);
+
+            char[] caracter_A_eliminar = { ',' };
+
+            for (int indice = 0; indice < pColumnas.Count; indice++)
+            {
+                strQuerry += pColumnas[indice] + " = " + pValores[indice] + " ,";
+            }
+            strQuerry = strQuerry.TrimEnd(caracter_A_eliminar);
+            strQuerry += " WHERE " + llavePrimaria + "= " + pID + ";";
+            return actualizarDato_Aux(strQuerry);
+        }
+
+        /// <summary>
+        /// Ejecuta en la base de datos el querry de actualizar dato
+        /// </summary>
+        /// <param name="pQuerry"></param>
+        /// <returns></returns>
+        private string actualizarDato_Aux(string pQuerry)
+        {
+            try
+            {
+                abrirConexionBase();
+                MySqlCommand comando = new MySqlCommand(string.Format(pQuerry), mscConexion);
+                comando.ExecuteNonQuery();
+                cerrarConexionBase();
                 return "Exitosa";
             }
             catch (Exception error)
