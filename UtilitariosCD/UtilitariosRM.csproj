@@ -70,6 +70,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Entities\Replica.cs" />
+    <Compile Include="Entities\ReplicaLog.cs" />
     <Compile Include="Entities\Table.cs" />
     <Compile Include="LogErrores\LogErrores.cs" />
     <Compile Include="Settings.Designer.cs">

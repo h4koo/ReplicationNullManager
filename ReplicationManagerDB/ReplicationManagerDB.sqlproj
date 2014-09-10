@@ -144,5 +144,7 @@
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
     <Build Include="Security\Permissions.sql" />
+    <Build Include="dbo\Stored Procedures\GetReplicaLogsUnsynchronized.sql" />
+    <Build Include="dbo\Stored Procedures\UpdateReplicaLogSynchronized.sql" />
   </ItemGroup>
 </Project>

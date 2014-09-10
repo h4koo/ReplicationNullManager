@@ -54,6 +54,10 @@
     <Compile Include="DataAccess\SqlServerDA.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ReplicationManagerBL\ReplicationManagerBL.csproj">
+      <Project>{57cc055f-e121-4a9b-a897-6e0d88365344}</Project>
+      <Name>ReplicationManagerBL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UtilitariosCD\UtilitariosRM.csproj">
       <Project>{cd781605-2b45-40a5-a407-8b8c36a5c2f4}</Project>
       <Name>UtilitariosRM</Name>
