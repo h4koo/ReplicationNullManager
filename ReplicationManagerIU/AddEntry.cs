@@ -116,6 +116,7 @@ namespace ReplicationManagerIU
             if (replica.StrSourceEngine.Contains("SQL Server")){
                 SqlDatabaseDA sqlDatabaseAccess = new SqlDatabaseDA(replica.StrSourceUser, replica.StrSourcePassword, replica.StrSourceIPAddress, replica.IntSourcePort.ToString(), replica.StrSourceDatabase);
                 sqlDatabaseAccess.CreateReplicaLogs();
+                //GEtTabe
             }
             if (replica.StrSourceEngine.Contains("MySQL"))
             {

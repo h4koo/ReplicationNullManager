@@ -89,13 +89,11 @@ namespace ReplicationManagerDA.DataAccess
         /// </summary>
         /// <param name="Database"></param>
         /// <returns></returns>
-        /// 
-        /// ****method should return the list of tables that are going to be replicated from the ReplicationManager internal tables
-        /// **** needs to be modified so it does't get al tables, but the tables to be replicated
-        public List<Table> GetAllTables(string Database) {
+        public List<Table> GetAllTables(string Database)
+        {
             List<Table> listResult = new List<Table>();
             Table oTable = new Table();
-          
+
             string strQuery = string.Empty;
             SqlDataReader dtrResult = null;
             DataTable dtResult = new DataTable();
@@ -104,12 +102,9 @@ namespace ReplicationManagerDA.DataAccess
             {
                 this.OpenConnection();
 
-                //modified string to use sys.tables (assumes the "USE 'Database'" is correct (should be the internal
-                //replication database), the use statement should be correct from the connection string, where the 
-                //database to use is selected
-                strQuery = "SELECT SourceTable FROM Replication WHERE SourceDatabase= '"+ Database+ "'"; 
+                strQuery = "sp_tables";
                 SqlCommand cmdComando = new SqlCommand(strQuery, this._oConnection);
-//                cmdComando.CommandType = CommandType.StoredProcedure;
+                cmdComando.CommandType = CommandType.StoredProcedure;
 
                 //cmdComando.Parameters.Add("@intResult", SqlDbType.Int).Direction = ParameterDirection.Output;
 
@@ -119,22 +114,17 @@ namespace ReplicationManagerDA.DataAccess
                 //Load the Results on the DataTable
                 dtResult.Load(dtrResult);
 
-//                foreach (DataRow dtrFila in dtResult.Rows)
-
-                //modified to only use the Reader since only one column needed
-                while(dtrResult.Read())
+                foreach (DataRow dtrFila in dtResult.Rows)
                 {
 
-//                    if (dtrFila["TABLE_TYPE"].ToString().Equals("TABLE"))
-//                    {
+                    if (dtrFila["TABLE_TYPE"].ToString().Equals("TABLE"))
+                    {
                         oTable = new Table();
-                        oTable.StrName = dtrResult.GetString(0);
+                        oTable.StrName = dtrFila["TABLE_NAME"].ToString();
                         listResult.Add(oTable);
-//                    }
+                    }
 
                 }
-
-                dtrResult.Close();
             }
             catch (Exception ex)
             {
@@ -142,11 +132,10 @@ namespace ReplicationManagerDA.DataAccess
             }
             finally
             {
-                
                 this.CloseConnection();
             }
             return listResult;
-            
+
         }
 
 

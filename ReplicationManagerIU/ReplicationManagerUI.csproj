@@ -98,6 +98,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ReplicationManagerBL\ReplicationManagerBL.csproj">
+      <Project>{57cc055f-e121-4a9b-a897-6e0d88365344}</Project>
+      <Name>ReplicationManagerBL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ReplicationManagerDA\ReplicationManagerDA.csproj">
       <Project>{f728e3d7-d379-40c7-aa4c-646abceb51a0}</Project>
       <Name>ReplicationManagerDA</Name>
