@@ -70,9 +70,9 @@
     <Compile Include="Entities\Engine.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Entities\mySql_Delete.cs" />
-    <Compile Include="Entities\mySql_Insert.cs" />
-    <Compile Include="Entities\mySql_Update.cs" />
+    <Compile Include="Entities\Delete.cs" />
+    <Compile Include="Entities\Insert.cs" />
+    <Compile Include="Entities\Update.cs" />
     <Compile Include="Entities\Replica.cs" />
     <Compile Include="Entities\ReplicaLog.cs" />
     <Compile Include="Entities\Table.cs" />

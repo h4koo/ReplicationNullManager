@@ -42,7 +42,11 @@ namespace UtilitariosCD.Entities
             get { return _boolNull; }
             set { _boolNull = value; }
         }
-        
+
+        public override string ToString()
+        {
+            return StrName;
+        }
         #endregion
     }
 }

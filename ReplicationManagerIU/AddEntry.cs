@@ -114,17 +114,20 @@ namespace ReplicationManagerIU
         public void InitialReplicaClientConfig(Replica replica){
             //Source Config
             Table table = new Table();
+            List<Insert> valuesToInsert = new List<Insert>();
             if (replica.StrSourceEngine.Contains("SQL Server")){
                 SqlDatabaseDA sqlDatabaseAccess = new SqlDatabaseDA(replica.StrSourceUser, replica.StrSourcePassword, replica.StrSourceIPAddress, replica.IntSourcePort.ToString(), replica.StrSourceDatabase);
                 sqlDatabaseAccess.CreateReplicaLogs();
                 //GEtTabe
                 table = sqlDatabaseAccess.getTableStructure(replica.StrSourceDatabase, replica.StrSourceTable);
+                valuesToInsert = sqlDatabaseAccess.GetCurrentRows(table);     
             }
             if (replica.StrSourceEngine.Contains("MySQL"))
             {
                 MysqlDatabaseDA sqlDatabaseAccess = new MysqlDatabaseDA(replica.StrSourceUser, replica.StrSourcePassword, replica.StrSourceIPAddress, replica.IntSourcePort.ToString(), replica.StrSourceDatabase);
                 sqlDatabaseAccess.CreateReplicaLogs();
                 table = sqlDatabaseAccess.getTableStructure(replica.StrSourceDatabase, replica.StrSourceTable);
+                valuesToInsert = sqlDatabaseAccess.GetCurrentRows(table);
             }
             //Terminal Config
             if (replica.StrTerminalEngine.Contains("SQL Server"))
@@ -132,12 +135,14 @@ namespace ReplicationManagerIU
                 SqlDatabaseDA sqlDatabaseAccess = new SqlDatabaseDA(replica.StrTerminalUser , replica.StrTerminalPassword, replica.StrTerminalIPAddress, replica.IntTerminalPort.ToString(), replica.StrTerminalDatabase);
                 sqlDatabaseAccess.CreateReplicaLogs();
                 sqlDatabaseAccess.createTable(table);
+                sqlDatabaseAccess.ExecuteMultipleInsert(valuesToInsert);
             }
             if (replica.StrTerminalEngine.Contains("MySQL"))
             {
                 MysqlDatabaseDA sqlDatabaseAccess = new MysqlDatabaseDA(replica.StrTerminalUser, replica.StrTerminalPassword, replica.StrTerminalIPAddress, replica.IntTerminalPort.ToString(), replica.StrTerminalDatabase);
                 sqlDatabaseAccess.CreateReplicaLogs();
                 sqlDatabaseAccess.createTable(table);
+                sqlDatabaseAccess.ExecuteMultipleInsert(valuesToInsert);
                 //MessageBox.Show(table.ToString());
             }
         }

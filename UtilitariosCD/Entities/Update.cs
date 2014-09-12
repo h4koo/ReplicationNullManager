@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UtilitariosCD.Entities
 {
-    class mySql_Update
+    class Update
     {
 
         private List<string> _columName;
@@ -15,7 +15,7 @@ namespace UtilitariosCD.Entities
         private string _nombreTabla;
         private string _condicion;
 
-        public mySql_Update(string pNombreTabla)
+        public Update(string pNombreTabla)
         {
             _columName = new List<string>();
             _valores = new List<string>();

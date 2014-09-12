@@ -270,6 +270,44 @@ namespace ReplicationManagerDA.DataAccess
             return resultado;
         }
 
+        public Boolean ExecuteInsert(Insert insert)
+        {
+            Boolean result = false;
+            string strQuery = insert.ToString();
+
+            SqlDataReader dtrResult = null;
+            DataTable dtResult = new DataTable();
+
+            try
+            {
+
+                this.OpenConnection();
+                SqlCommand cmdComando = new SqlCommand(strQuery, this._oConnection);
+
+                cmdComando.ExecuteNonQuery();
+                result = true;
+                //Load the Results on the DataTable
+            }
+            catch (Exception ex)
+            {
+                this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, strQuery);
+            }
+            finally
+            {
+                this.CloseConnection();
+            }
+            return result;
+        }
+
+        public Boolean ExecuteMultipleInsert(List<Insert> listInsert) {
+            Boolean result = true;
+            foreach (Insert insert in listInsert) {
+                if (!this.ExecuteInsert(insert)) {
+                    result = false;
+                }
+            }
+            return result;
+        }
 
         public Table getTableStructure(string strNombreBase, string pNombreTabla)
         {
@@ -342,6 +380,57 @@ namespace ReplicationManagerDA.DataAccess
             }
             return oTable;
         }
+
+
+
+        public List<Insert> GetCurrentRows(Table table) {
+            List<Insert> result = new List<Insert>();
+            Insert oInsert = new Insert();
+            string strListColumns =  string.Join(",", table.ListColumns);
+            
+            string strQuery = "SELECT " + strListColumns + " FROM " + table.StrName;
+            
+
+            SqlDataReader dtrResult = null;
+            DataTable dtResult = new DataTable();
+
+            try
+            {
+
+                this.OpenConnection();
+                SqlCommand cmdComando = new SqlCommand(strQuery, this._oConnection);
+                
+                dtrResult = cmdComando.ExecuteReader();
+
+                //Load the Results on the DataTable
+                dtResult.Load(dtrResult);
+
+                foreach (DataRow dtrFila in dtResult.Rows)
+                {
+                    oInsert = new Insert();
+                    
+                    foreach (Column column in table.ListColumns) {
+                        oInsert.strTableName = table.StrName;
+                        oInsert.listColumnNames.Add(column.StrName);
+                        oInsert.listValues.Add(dtrFila[column.StrName].ToString().Trim());
+                    }
+                    //nchar is set but default on all engines is varchar
+                    result.Add(oInsert);
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, strQuery);
+            }
+            finally
+            {
+                this.CloseConnection();
+            }
+            return result;
+
+        } 
 
         #region Observer
         /// <summary>
