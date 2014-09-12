@@ -241,8 +241,109 @@ namespace ReplicationManagerDA.DataAccess
             return result;
         }
 
+        public Boolean createTable(Table table)
+        {
+            Boolean resultado = false;
+            string strQuery = table.ToString();
+
+            SqlDataReader dtrResult = null;
+            DataTable dtResult = new DataTable();
+
+            try
+            {
+
+                this.OpenConnection();
+                SqlCommand cmdComando = new SqlCommand(strQuery, this._oConnection);
+
+                cmdComando.ExecuteNonQuery();
+                resultado = true;
+                //Load the Results on the DataTable
+            }
+            catch (Exception ex)
+            {
+                this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, strQuery);
+            }
+            finally
+            {
+                this.CloseConnection();
+            }
+            return resultado;
+        }
 
 
+        public Table getTableStructure(string strNombreBase, string pNombreTabla)
+        {
+            Table oTable = new Table();
+            oTable.StrName = pNombreTabla;
+            string strQuery = "sp_columns";
+
+            SqlDataReader dtrResult = null;
+            DataTable dtResult = new DataTable();
+
+            try
+            {
+
+                this.OpenConnection();
+                SqlCommand cmdComando = new SqlCommand(strQuery, this._oConnection);
+                cmdComando.CommandType = CommandType.StoredProcedure;
+                cmdComando.Parameters.AddWithValue("@table_name", pNombreTabla);
+                dtrResult = cmdComando.ExecuteReader();
+
+                //Load the Results on the DataTable
+                dtResult.Load(dtrResult);
+
+                foreach (DataRow dtrFila in dtResult.Rows)
+                {
+                    Column oColumn = new Column();
+                    oColumn.StrName = dtrFila["COLUMN_NAME"].ToString();
+                    oColumn.StrType = dtrFila["TYPE_NAME"].ToString();
+                    
+                    //nchar is set but default on all engines is varchar
+                    if (oColumn.StrType.Equals("nchar") || oColumn.StrType.Equals("varchar"))
+                    {
+                        oColumn.StrType = "varchar("+dtrFila["PRECISION"].ToString()+")";
+                    }
+
+                    if (oColumn.StrType.Contains("int"))
+                    {
+                        oColumn.StrType = "int";
+                    }
+                    
+                    if (oColumn.StrType.Contains("float"))
+                    {
+                        oColumn.StrType = "float";
+                    }
+
+                    if (oColumn.StrType.Contains("smallint"))
+                    {
+                        oColumn.StrType = "smallint";
+                    }
+
+                    //Identity is hidden on column
+                    if (oColumn.StrType.Contains("identity")){
+                        oColumn.StrType = oColumn.StrType.Remove(oColumn.StrType.Length - 8);
+                    }
+                    if (dtrFila["IS_NULLABLE"].ToString().Equals("NO"))
+                    {
+                        oColumn.BoolNull = true;
+                    }
+                    oTable.ListColumns.Add(oColumn);
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, strQuery);
+            }
+            finally
+            {
+                this.CloseConnection();
+            }
+            return oTable;
+        }
+
+        #region Observer
         /// <summary>
         /// Return all logs that have not been synchronized
         /// </summary>
@@ -378,5 +479,6 @@ namespace ReplicationManagerDA.DataAccess
             set { _listReplicaLogs = value; }
         }
 
+        #endregion
     }
 }

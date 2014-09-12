@@ -113,26 +113,32 @@ namespace ReplicationManagerIU
         /// <param name="replica"></param>
         public void InitialReplicaClientConfig(Replica replica){
             //Source Config
+            Table table = new Table();
             if (replica.StrSourceEngine.Contains("SQL Server")){
                 SqlDatabaseDA sqlDatabaseAccess = new SqlDatabaseDA(replica.StrSourceUser, replica.StrSourcePassword, replica.StrSourceIPAddress, replica.IntSourcePort.ToString(), replica.StrSourceDatabase);
                 sqlDatabaseAccess.CreateReplicaLogs();
                 //GEtTabe
+                table = sqlDatabaseAccess.getTableStructure(replica.StrSourceDatabase, replica.StrSourceTable);
             }
             if (replica.StrSourceEngine.Contains("MySQL"))
             {
                 MysqlDatabaseDA sqlDatabaseAccess = new MysqlDatabaseDA(replica.StrSourceUser, replica.StrSourcePassword, replica.StrSourceIPAddress, replica.IntSourcePort.ToString(), replica.StrSourceDatabase);
                 sqlDatabaseAccess.CreateReplicaLogs();
+                table = sqlDatabaseAccess.getTableStructure(replica.StrSourceDatabase, replica.StrSourceTable);
             }
             //Terminal Config
             if (replica.StrTerminalEngine.Contains("SQL Server"))
             {
                 SqlDatabaseDA sqlDatabaseAccess = new SqlDatabaseDA(replica.StrTerminalUser , replica.StrTerminalPassword, replica.StrTerminalIPAddress, replica.IntTerminalPort.ToString(), replica.StrTerminalDatabase);
                 sqlDatabaseAccess.CreateReplicaLogs();
+                sqlDatabaseAccess.createTable(table);
             }
             if (replica.StrTerminalEngine.Contains("MySQL"))
             {
                 MysqlDatabaseDA sqlDatabaseAccess = new MysqlDatabaseDA(replica.StrTerminalUser, replica.StrTerminalPassword, replica.StrTerminalIPAddress, replica.IntTerminalPort.ToString(), replica.StrTerminalDatabase);
                 sqlDatabaseAccess.CreateReplicaLogs();
+                sqlDatabaseAccess.createTable(table);
+                //MessageBox.Show(table.ToString());
             }
         }
         /// <summary>

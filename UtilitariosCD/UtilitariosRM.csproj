@@ -65,6 +65,7 @@
     <Compile Include="App.cs" />
     <Compile Include="ClasesTipadas\ParamConsultaCT.cs" />
     <Compile Include="Constantes\IConstantes.cs" />
+    <Compile Include="Entities\Column.cs" />
     <Compile Include="Entities\Database.cs" />
     <Compile Include="Entities\Engine.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

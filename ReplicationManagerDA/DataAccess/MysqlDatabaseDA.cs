@@ -229,6 +229,139 @@ namespace ReplicationManagerDA.DataAccess
 
             return listResult;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pNombreTabla"></param>
+        /// <returns></returns>
+        public Table getTableStructure(string strNombreBase, string pNombreTabla)
+        {
+            Table oTable = new Table();
+            oTable.StrName = pNombreTabla;
+            string querry = "use " + strNombreBase + "; describe " + pNombreTabla;
+
+            try
+            {
+            
+                this.OpenConnection();
+                MySqlCommand cmdComando = new MySqlCommand(querry, this._oConnection);
+                MySqlDataReader lector = cmdComando.ExecuteReader();
+
+
+                while (lector.Read())
+                {
+                    Column oColumn = new Column();
+                    oColumn.StrName = lector.GetString(0);
+                    oColumn.StrType = lector.GetString(1);
+
+                    //nchar is set but default on all engines is varchar
+//                    if (oColumn.StrType.Equals("nchar") || oColumn.StrType.Equals("varchar"))
+//                    {
+//                        oColumn.StrType = "varchar(" + dtrFila["PRECISION"].ToString() + ")";
+//                    }
+
+                    if (oColumn.StrType.Contains("int"))
+                    {
+                        oColumn.StrType = "int";
+                    }
+
+                    if (oColumn.StrType.Contains("float"))
+                    {
+                        oColumn.StrType = "float";
+                    }
+
+                    if (oColumn.StrType.Contains("smallint"))
+                    {
+                        oColumn.StrType = "smallint";
+                    }
+
+
+                    if (!lector.GetString(2).Equals("NO"))
+                    {
+                        oColumn.BoolNull = true;
+                    }
+                    oTable.ListColumns.Add(oColumn);
+                }
+            }
+            catch (Exception ex)
+            {
+                this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, querry);
+            }
+            finally
+            {
+                this.CloseConnection();
+            }
+            return oTable;
+        }
+
+        public Boolean createTable(Table table)
+        {
+            Boolean resultado = false;
+            string strQuery = table.ToString();
+
+            DataTable dtResult = new DataTable();
+
+            try
+            {
+
+                this.OpenConnection();
+                MySqlCommand cmdComando = new MySqlCommand(strQuery, this._oConnection);
+
+                cmdComando.ExecuteNonQuery();
+                resultado = true;
+                //Load the Results on the DataTable
+            }
+            catch (Exception ex)
+            {
+                this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, strQuery);
+            }
+            finally
+            {
+                this.CloseConnection();
+            }
+            return resultado;
+        }
+
+
+        /// <summary>
+        /// Crea una tabla a la base de datos.
+        /// </summary>
+        /// <param name="pNombreTabla"></param>
+        /// <param name="pColumnas"></param>
+        /// <param name="pTipo"></param>
+        /// <returns></returns>
+        //public string crearTabla(string pNombre, List<string> pColumnas, List<string> pTipo)
+        public string createSQLTable(Table oTable)
+        {
+            string strQuerry = "create table " + oTable.StrName + " (";
+
+            int counterColumns = oTable.ListColumns.Count();
+
+            foreach (Column Ocolumn in oTable.ListColumns)
+            {
+                strQuerry += Ocolumn.StrName + " " + Ocolumn.StrType;
+
+                if (Ocolumn.BoolNull)
+                {
+                    strQuerry += " NOT NULL ";
+                }
+
+                //Delimiter , for more than 1 colum
+                counterColumns--;
+                if (counterColumns > 0)
+                {
+                    strQuerry += ", ";
+                } 
+
+            }
+
+            //strQuerry += "primary key(" + pColumnas[0] + ")
+            strQuerry += ");";
+            return strQuerry;
+        }
+
+
+        #region Observer
 
 
         /// <summary>
@@ -262,6 +395,7 @@ namespace ReplicationManagerDA.DataAccess
                 this.CloseConnection();
             }
         }
+
 
 
         public void Run()
@@ -303,6 +437,7 @@ namespace ReplicationManagerDA.DataAccess
             get { return _listReplicaLogs; }
             set { _listReplicaLogs = value; }
         }
-       
+
+        #endregion
     }
 }
