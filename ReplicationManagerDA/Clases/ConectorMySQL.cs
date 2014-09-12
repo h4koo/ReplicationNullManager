@@ -281,7 +281,7 @@ namespace ReplicationManagerAD.Clases
             {
                 return error.Message;
             }
-        }
+        }//END CREAR TABLA
 
         /// <summary>
         /// Retorna el nombre de la llave primaria de la relacion ingresada como parametro
@@ -307,7 +307,7 @@ namespace ReplicationManagerAD.Clases
             {
                 return error.Message;
             }
-        }
+        }//END SOLICITAR LLAVE PRIMARIA
 
         /// <summary>
         /// Se encarga de generar el querry para llamar a un metodo auxiliar que actualiza los datos en la base de datos
@@ -332,7 +332,7 @@ namespace ReplicationManagerAD.Clases
             strQuerry = strQuerry.TrimEnd(caracter_A_eliminar);
             strQuerry += " WHERE " + llavePrimaria + "= " + pID + ";";
             return actualizarDato_Aux(strQuerry);
-        }
+        }//END ACTUALIZAR DATO
 
         /// <summary>
         /// Ejecuta en la base de datos el querry de actualizar dato
@@ -353,7 +353,7 @@ namespace ReplicationManagerAD.Clases
             {
                 return error.Message;
             }
-        }
+        }//END ACTUALIZAR DATO AUXILIAR
 
         /// <summary>
         /// Elimina los datos deseados en la base de datos

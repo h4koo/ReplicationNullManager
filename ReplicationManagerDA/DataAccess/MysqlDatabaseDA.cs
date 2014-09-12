@@ -140,10 +140,11 @@ namespace ReplicationManagerDA.DataAccess
             {
                 this.OpenConnection();
                 strQuery = "CREATE TABLE  IF NOT EXISTS `replicalog` (" +
-                                "`idReplicaLog` int(11) NOT NULL AUTO_INCREMENT," +
-                                "`ReplicaTable` varchar(30) NOT NULL," +
-                                "`ReplicaDatetime` datetime NOT NULL," +
-                                "`ReplicaTransaction` varchar(100) NOT NULL," +
+                                "`idReplicaLog`        int(11)        NOT NULL     AUTO_INCREMENT," +
+                                "`ReplicaTable`        varchar(30)    NOT NULL," +
+                                "`ReplicaDatetime`     datetime NOT   NULL,"     +
+                                "`ReplicaTransaction`  varchar(100)   NOT NULL," +
+                                "`banderaReplica`      bool           NOT NULL," +
                             "PRIMARY KEY (`idReplicaLog`)" +
                             ") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
