@@ -7,7 +7,7 @@
     <Name>ReplicationManagerDB</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
-    <ProjectGuid>{bd0cac2b-5f85-4234-afde-e30230822882}</ProjectGuid>
+    <ProjectGuid>{3de5c155-2d43-41a1-9dd5-c7ba319ebc94}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql100DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
@@ -104,45 +104,53 @@
     <Folder Include="dbo\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="dbo\Tables\Engine.sql">
+    <Build Include="dbo\Tables\Engine_1.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="dbo\Tables\Replica.sql">
+    <Build Include="dbo\Tables\Replica_1.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="dbo\Views\Replicas.sql">
+    <Build Include="dbo\Views\Replicas_1.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="Security\ReplicationManager_su.sql" />
-    <Build Include="Security\ReplicationManager_su_1.sql" />
-    <Build Include="Security\RoleMemberships.sql" />
-    <Build Include="dbo\Stored Procedures\GetAllReplicas.sql">
+    <Build Include="Security\ReplicationManager_su_2.sql" />
+    <Build Include="Security\ReplicationManager_su_3.sql" />
+    <Build Include="Security\RoleMemberships_1.sql" />
+    <Build Include="Security\RoleMemberships_2.sql" />
+    <Build Include="Security\RoleMemberships_3.sql" />
+    <Build Include="Security\RoleMemberships_4.sql" />
+    <Build Include="Security\RoleMemberships_5.sql" />
+    <Build Include="Security\RoleMemberships_6.sql" />
+    <Build Include="Security\RoleMemberships_7.sql" />
+    <Build Include="Security\RoleMemberships_8.sql" />
+    <Build Include="Security\RoleMemberships_9.sql" />
+    <Build Include="dbo\Stored Procedures\GetAllReplicas_1.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="dbo\Stored Procedures\GetAllSupportedEngines.sql">
+    <Build Include="dbo\Stored Procedures\GetAllSupportedEngines_1.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="dbo\Stored Procedures\EnableReplica.sql">
+    <Build Include="dbo\Stored Procedures\EnableReplica_1.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="dbo\Stored Procedures\DisableReplica.sql">
+    <Build Include="dbo\Stored Procedures\DisableReplica_1.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="dbo\Stored Procedures\InsertReplica.sql">
+    <Build Include="dbo\Stored Procedures\InsertReplica_1.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="dbo\Stored Procedures\DeleteReplica.sql">
+    <Build Include="dbo\Stored Procedures\DeleteReplica_1.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="Security\Permissions.sql" />
+    <Build Include="Security\Permissions_1.sql" />
   </ItemGroup>
 </Project>

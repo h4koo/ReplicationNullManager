@@ -7,10 +7,11 @@ using System.Data.SqlClient;
 using UtilitariosCD.LogErrores;
 using UtilitariosCD.Constantes;
 using System.Reflection;
+using ReplicationManagerBL.Observer_Design_Pattern;
 
 namespace ReplicationManagerDA
 {
-    public class SqlServerDA
+    public class SqlServerDA : Observable
     {
         public LogErrores _oLogErrors;
         public SqlConnection _oConnection;

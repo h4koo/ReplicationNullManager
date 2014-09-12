@@ -41,6 +41,7 @@ namespace ReplicationManagerIU
         private void Reload_Replicas() {
             ReplicaDA replicaDA = new ReplicaDA();
             replicas = replicaDA.GetAllReplicas();
+            
             List<ReplicaView> replicasView = new List<ReplicaView>();
             if (replicas.Count > 0)
             {

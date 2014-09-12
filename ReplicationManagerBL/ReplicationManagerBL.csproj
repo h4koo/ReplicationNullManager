@@ -4,15 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F728E3D7-D379-40C7-AA4C-646ABCEB51A0}</ProjectGuid>
+    <ProjectGuid>{57CC055F-E121-4A9B-A897-6E0D88365344}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ReplicationManagerDA</RootNamespace>
-    <AssemblyName>ReplicationManagerDA</AssemblyName>
+    <RootNamespace>ReplicationManagerBL</RootNamespace>
+    <AssemblyName>ReplicationManagerBL</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MySql.Data">
-      <HintPath>..\packages\MySql.Data.6.8.3\lib\net45\MySql.Data.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,36 +39,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Clases\ConectorMySQL.cs" />
-    <Compile Include="DataAccess\MysqlDatabaseDA.cs" />
-    <Compile Include="DataAccess\MysqlServerDA.cs" />
-    <Compile Include="DataAccess\SqlDatabaseDA.cs" />
-    <Compile Include="DataAccess\EngineDA.cs" />
-    <Compile Include="DataAccess\ReplicaDA.cs" />
+    <Compile Include="Observer Design Pattern\Observable.cs" />
+    <Compile Include="Observer Design Pattern\Observer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DataAccess\SqlServerDA.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ReplicationManagerBL\ReplicationManagerBL.csproj">
-      <Project>{57cc055f-e121-4a9b-a897-6e0d88365344}</Project>
-      <Name>ReplicationManagerBL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\UtilitariosCD\UtilitariosRM.csproj">
-      <Project>{cd781605-2b45-40a5-a407-8b8c36a5c2f4}</Project>
-      <Name>UtilitariosRM</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

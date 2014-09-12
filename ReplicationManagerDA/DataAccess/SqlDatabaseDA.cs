@@ -10,20 +10,29 @@ using System.Data;
 using UtilitariosCD.LogErrores;
 using UtilitariosCD.Constantes;
 using System.Reflection;
+using ReplicationManagerBL.Observer_Design_Pattern;
+using System.Threading;
 
 namespace ReplicationManagerDA.DataAccess
 {
     public class SqlDatabaseDA : SqlServerDA
     {
+
+        private List<ReplicaLog> _listReplicaLogs;
+        
+
+
         public SqlDatabaseDA(string user, string password, string server, string port): base(user,password,server,port,"master")
         {
-            
+            _listReplicaLogs = new List<ReplicaLog>();
         }
         public SqlDatabaseDA(string user, string password, string server, string port, string db)
             : base(user, password, server, port, db)
         {
-
+            _listReplicaLogs = new List<ReplicaLog>();
         }
+
+
         /// <summary>
         /// This is the DA for accessing the Replica table
         /// Date: 9/4/2014
@@ -80,13 +89,11 @@ namespace ReplicationManagerDA.DataAccess
         /// </summary>
         /// <param name="Database"></param>
         /// <returns></returns>
-        /// 
-        /// ****method should return the list of tables that are going to be replicated from the ReplicationManager internal tables
-        /// **** needs to be modified so it does't get al tables, but the tables to be replicated
-        public List<Table> GetAllTables(string Database) {
+        public List<Table> GetAllTables(string Database)
+        {
             List<Table> listResult = new List<Table>();
             Table oTable = new Table();
-          
+
             string strQuery = string.Empty;
             SqlDataReader dtrResult = null;
             DataTable dtResult = new DataTable();
@@ -95,12 +102,9 @@ namespace ReplicationManagerDA.DataAccess
             {
                 this.OpenConnection();
 
-                //modified string to use sys.tables (assumes the "USE 'Database'" is correct (should be the internal
-                //replication database), the use statement should be correct from the connection string, where the 
-                //database to use is selected
-                strQuery = "SELECT SourceTable FROM Replication WHERE SourceDatabase= '"+ Database+ "'"; 
+                strQuery = "sp_tables";
                 SqlCommand cmdComando = new SqlCommand(strQuery, this._oConnection);
-//                cmdComando.CommandType = CommandType.StoredProcedure;
+                cmdComando.CommandType = CommandType.StoredProcedure;
 
                 //cmdComando.Parameters.Add("@intResult", SqlDbType.Int).Direction = ParameterDirection.Output;
 
@@ -110,22 +114,17 @@ namespace ReplicationManagerDA.DataAccess
                 //Load the Results on the DataTable
                 dtResult.Load(dtrResult);
 
-//                foreach (DataRow dtrFila in dtResult.Rows)
-
-                //modified to only use the Reader since only one column needed
-                while(dtrResult.Read())
+                foreach (DataRow dtrFila in dtResult.Rows)
                 {
 
-//                    if (dtrFila["TABLE_TYPE"].ToString().Equals("TABLE"))
-//                    {
+                    if (dtrFila["TABLE_TYPE"].ToString().Equals("TABLE"))
+                    {
                         oTable = new Table();
-                        oTable.StrName = dtrResult.GetString(0);
+                        oTable.StrName = dtrFila["TABLE_NAME"].ToString();
                         listResult.Add(oTable);
-//                    }
+                    }
 
                 }
-
-                dtrResult.Close();
             }
             catch (Exception ex)
             {
@@ -133,11 +132,10 @@ namespace ReplicationManagerDA.DataAccess
             }
             finally
             {
-                
                 this.CloseConnection();
             }
             return listResult;
-            
+
         }
 
 
@@ -224,7 +222,8 @@ namespace ReplicationManagerDA.DataAccess
                                          "[idReplicaLog] [int] IDENTITY(1,1) NOT NULL," +
                                          "[ReplicaTable] [nchar](30) NOT NULL," +
                                          "[ReplicaDatetime] [datetime] NOT NULL," +
-                                         "[ReplicaTransaction] [nchar](100) NOT NULL" +
+                                         "[ReplicaTransaction] [nchar](100) NOT NULL," +
+                                         "[IsSynchronized] [bit] NOT NULL default 0" +
                                          ") ON [PRIMARY]";
 
                 SqlCommand cmdComando = new SqlCommand(strQuery, this._oConnection);
@@ -241,6 +240,245 @@ namespace ReplicationManagerDA.DataAccess
             }
             return result;
         }
-        
+
+        public Boolean createTable(Table table)
+        {
+            Boolean resultado = false;
+            string strQuery = table.ToString();
+
+            SqlDataReader dtrResult = null;
+            DataTable dtResult = new DataTable();
+
+            try
+            {
+
+                this.OpenConnection();
+                SqlCommand cmdComando = new SqlCommand(strQuery, this._oConnection);
+
+                cmdComando.ExecuteNonQuery();
+                resultado = true;
+                //Load the Results on the DataTable
+            }
+            catch (Exception ex)
+            {
+                this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, strQuery);
+            }
+            finally
+            {
+                this.CloseConnection();
+            }
+            return resultado;
+        }
+
+
+        public Table getTableStructure(string strNombreBase, string pNombreTabla)
+        {
+            Table oTable = new Table();
+            oTable.StrName = pNombreTabla;
+            string strQuery = "sp_columns";
+
+            SqlDataReader dtrResult = null;
+            DataTable dtResult = new DataTable();
+
+            try
+            {
+
+                this.OpenConnection();
+                SqlCommand cmdComando = new SqlCommand(strQuery, this._oConnection);
+                cmdComando.CommandType = CommandType.StoredProcedure;
+                cmdComando.Parameters.AddWithValue("@table_name", pNombreTabla);
+                dtrResult = cmdComando.ExecuteReader();
+
+                //Load the Results on the DataTable
+                dtResult.Load(dtrResult);
+
+                foreach (DataRow dtrFila in dtResult.Rows)
+                {
+                    Column oColumn = new Column();
+                    oColumn.StrName = dtrFila["COLUMN_NAME"].ToString();
+                    oColumn.StrType = dtrFila["TYPE_NAME"].ToString();
+                    
+                    //nchar is set but default on all engines is varchar
+                    if (oColumn.StrType.Equals("nchar") || oColumn.StrType.Equals("varchar"))
+                    {
+                        oColumn.StrType = "varchar("+dtrFila["PRECISION"].ToString()+")";
+                    }
+
+                    if (oColumn.StrType.Contains("int"))
+                    {
+                        oColumn.StrType = "int";
+                    }
+                    
+                    if (oColumn.StrType.Contains("float"))
+                    {
+                        oColumn.StrType = "float";
+                    }
+
+                    if (oColumn.StrType.Contains("smallint"))
+                    {
+                        oColumn.StrType = "smallint";
+                    }
+
+                    //Identity is hidden on column
+                    if (oColumn.StrType.Contains("identity")){
+                        oColumn.StrType = oColumn.StrType.Remove(oColumn.StrType.Length - 8);
+                    }
+                    if (dtrFila["IS_NULLABLE"].ToString().Equals("NO"))
+                    {
+                        oColumn.BoolNull = true;
+                    }
+                    oTable.ListColumns.Add(oColumn);
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, strQuery);
+            }
+            finally
+            {
+                this.CloseConnection();
+            }
+            return oTable;
+        }
+
+        #region Observer
+        /// <summary>
+        /// Return all logs that have not been synchronized
+        /// </summary>
+        /// <returns>A list of all the ReplicasLogs on the data base</returns>
+        public List<ReplicaLog> GetReplicaLogsUnsynchronized()
+        {
+            ReplicaLog oReplicaLog = new ReplicaLog();
+            List<ReplicaLog> listResult = new List<ReplicaLog>();
+
+            string strQuery = string.Empty;
+            SqlDataReader dtrResult = null;
+            DataTable dtResult = new DataTable();
+
+            try
+            {
+                this.OpenConnection();
+
+                strQuery = "SELECT " +
+	                            " [idReplicaLog], " + 
+	                            " [ReplicaTable], " +
+	                            " [ReplicaDatetime], " +
+	                            " [ReplicaTransaction], " +
+	                            "[IsSynchronized]" +
+                            " FROM [dbo].[ReplicaLog] " +
+                            " WHERE " +
+	                            " [IsSynchronized] = 0 ";
+
+                SqlCommand cmdComando = new SqlCommand(strQuery, this._oConnection);
+                dtrResult = cmdComando.ExecuteReader();
+
+
+                //Load the Results on the DataTable
+                dtResult.Load(dtrResult);
+
+                foreach (DataRow dtrFila in dtResult.Rows)
+                {
+                    oReplicaLog = new ReplicaLog();
+
+                    oReplicaLog.IntIdReplicaLog = Convert.ToInt32(dtrFila["idReplicaLog"].ToString());
+                    oReplicaLog.StrReplicaTable = dtrFila["ReplicaTable"].ToString();
+                    oReplicaLog.DtReplicaDatetime = Convert.ToDateTime(dtrFila["ReplicaDatetime"].ToString());
+                    oReplicaLog.StrReplicaTransaction = dtrFila["ReplicaTransaction"].ToString();
+                    oReplicaLog.BlnIsSynchronized = Convert.ToBoolean(dtrFila["IsSynchronized"].ToString());                    
+
+                    listResult.Add(oReplicaLog);
+                }
+            }
+            catch (Exception ex)
+            {
+                this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, strQuery);
+            }
+            finally
+            {
+                this.CloseConnection();
+            }
+
+
+            return listResult;
+        }
+
+
+        /// <summary>
+        /// Indicates that a ReplicaLog has been synchronized
+        /// </summary>
+        /// <param name="pintIdReplicaLog">ID synchronized ReplicaLog</param>
+        public void UpdateReplicaLogSynchronized(int pintIdReplicaLog)
+        {
+            string strQuery = string.Empty;
+
+            try
+            {
+                this.OpenConnection();
+
+                strQuery = " UPDATE [dbo].[ReplicaLog] " +
+	                       " SET " +
+		                        " [IsSynchronized] = 1 " +
+	                        " WHERE " +
+                                " [idReplicaLog] = " + pintIdReplicaLog.ToString();
+                
+
+                SqlCommand cmdComando = new SqlCommand(strQuery, this._oConnection);
+                cmdComando.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+                this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, strQuery);
+            }
+            finally
+            {
+                this.CloseConnection();
+            }        
+        }
+
+
+        public void Run()
+        {
+            try
+            {
+                ListReplicaLogs = GetReplicaLogsUnsynchronized();
+
+                if (ListReplicaLogs != null)
+                {
+                    if (ListReplicaLogs.Count > 0)
+                    {
+                        this.Notify();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, string.Empty);
+            }
+        }
+
+        public void VerifyChanges()
+        {
+            try
+            {
+                Thread newThread = new Thread(new ThreadStart(Run));
+                newThread.Start(); 
+            }
+            catch (Exception ex)
+            {
+                this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, string.Empty);
+            }            
+        }
+
+
+        public List<ReplicaLog> ListReplicaLogs
+        {
+            get { return _listReplicaLogs; }
+            set { _listReplicaLogs = value; }
+        }
+
+        #endregion
     }
 }
