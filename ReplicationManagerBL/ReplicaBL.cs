@@ -102,6 +102,16 @@ namespace ReplicationManagerBL
                     {
                         mysqlDatabaseBL.TableSyncTerminal(replica,replicaLog);
                     }
+                    if (replica.StrSourceEngine.Contains("SQL Server"))
+                    {
+                        
+                        sqlDatabaseBL.SetReplicaSourceLogSync(replica, replicaLog);
+                    }
+                    if (replica.StrSourceEngine.Contains("MySQL"))
+                    {
+                        //mysqlDatabaseBL.TableSyncTerminal(replica,replicaLog);
+                        mysqlDatabaseBL.SetReplicaSourceLogSync(replica, replicaLog);
+                    }
                 }
             }
             if (replicaLogTerminal.Count() > 0)
@@ -113,10 +123,22 @@ namespace ReplicationManagerBL
                     if (replica.StrSourceEngine.Contains("SQL Server"))
                     {
                         sqlDatabaseBL.TableSyncSource(replica, replicaLog);
+                        sqlDatabaseBL.SetReplicaTerminalLogSync(replica, replicaLog);
                     }
                     if (replica.StrSourceEngine.Contains("MySQL"))
                     {
                         mysqlDatabaseBL.TableSyncSource(replica, replicaLog);
+                        //sqlDatabaseBL.SetReplicaTerminalLogSync(replica, replicaLog);
+                    }
+                    if (replica.StrTerminalEngine.Contains("SQL Server"))
+                    {
+
+                        sqlDatabaseBL.SetReplicaTerminalLogSync(replica, replicaLog);
+                    }
+                    if (replica.StrTerminalEngine.Contains("MySQL"))
+                    {
+                        //mysqlDatabaseBL.TableSyncTerminal(replica,replicaLog);
+                        mysqlDatabaseBL.SetReplicaTerminalLogSync(replica, replicaLog);
                     }
                 }
             }
