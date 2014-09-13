@@ -16,7 +16,6 @@ using System.Data;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 using MySql.Data.Types;
-using ReplicationManagerBL.Observer_Design_Pattern;
 using System.Threading;
 
 namespace ReplicationManagerDA.DataAccess
@@ -32,11 +31,13 @@ namespace ReplicationManagerDA.DataAccess
         {
             
         }
+
         public MysqlDatabaseDA(string user, string password, string server, string port, string db)
             : base(user, password, server, port, db)
         {
 
         }
+
         /// <summary>
         /// This is the DA for accessing the Replica table
         /// Date: 9/4/2014
@@ -84,6 +85,7 @@ namespace ReplicationManagerDA.DataAccess
             }
             return listResult;
         }
+
         /// <summary>
         /// This method will retrieve all the Tables for and specific DB on MySQL, this cannot be a SP because is on client side
         /// </summary>
@@ -133,6 +135,7 @@ namespace ReplicationManagerDA.DataAccess
             return listResult;
 
         }
+
         /// <summary>
         /// If not already exist it will create the LogReplicaTable on the Engine
         /// This cannot be a SP since it will run on a Client DB, SQL Embedded
@@ -229,6 +232,7 @@ namespace ReplicationManagerDA.DataAccess
 
             return listResult;
         }
+
         /// <summary>
         /// 
         /// </summary>

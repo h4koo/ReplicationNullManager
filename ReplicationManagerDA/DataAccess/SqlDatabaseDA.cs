@@ -25,6 +25,7 @@ namespace ReplicationManagerDA.DataAccess
         {
             _listReplicaLogs = new List<ReplicaLog>();
         }
+
         public SqlDatabaseDA(string user, string password, string server, string port, string db)
             : base(user, password, server, port, db)
         {
@@ -380,6 +381,62 @@ namespace ReplicationManagerDA.DataAccess
             return oTable;
         }
 
+        public Boolean CreateTriggerInsert(Table table)
+        {
+            bool result = false;
+
+
+            try
+            {
+
+                string strTransaction = "' INSERT INTO " + table.StrName + 
+                                        " ( " + 
+                                        string.Join(",", table.ListColumns) +
+                                        " ) " + 
+                                        " VALUES " + 
+                                        " ( ''' + " +
+                                            "(SELECT INSERTED." + string.Join(" FROM INSERTED) + ''', ''' + (SELECT INSERTED.", table.ListColumns) + " FROM INSERTED) " +
+                                        " + ''' ) '";
+
+                string strQuery = " CREATE TRIGGER " + table.StrName + "_INSERT " +
+                                  " ON " + table.StrName +
+                                  " AFTER INSERT " +
+                                  " AS " + 
+                                  " BEGIN " + 
+                                  " " +
+                                  "     INSERT INTO ReplicaLog " + 
+                                  "     ( " +
+                                  "         ReplicaTable " +
+                                  "         ,ReplicaDatetime " +
+                                  "         ,ReplicaTransaction " +
+                                  "         ,IsSynchronized " +
+                                  "     ) " +
+                                  "     VALUES " +
+                                  "     ( " +
+                                  "         '" + table.StrName + "'" +
+                                  "         ,GETDATE() " +
+                                  "         , " + strTransaction + 
+                                  "         ,0 " +
+                                  "     ) " +
+                                  " " + 
+                                  " END";
+
+
+                this.OpenConnection();
+                SqlCommand cmdComando = new SqlCommand(strQuery, this._oConnection);
+
+                cmdComando.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+                this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, strQuery);
+                result = false;
+            }
+
+
+            return result;
+        }
 
 
         public List<Insert> GetCurrentRows(Table table) {
