@@ -8,7 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ReplicationManagerIU
+using ProyectoX.DataAccess;
+
+namespace ProyectoX
 {
     public partial class ProyectoX : Form
     {
@@ -17,8 +19,17 @@ namespace ReplicationManagerIU
             InitializeComponent();
         }
 
+        private void ProyectoX_Load(object sender, EventArgs e)
+        {
+
+        }
+
         private void btn_Ejecutar_Click(object sender, EventArgs e)
         {
+            ProyectoXDA proyectoXDA = new ProyectoXDA("root", "123456", "localhost", "3306", "world");           
+            
+            DGV_Tabla.DataSource = proyectoXDA.getAllCountry();
+            DGV_Tabla.DataMember = "country";                        
 
         }
     }
