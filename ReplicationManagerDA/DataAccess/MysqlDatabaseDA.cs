@@ -500,13 +500,14 @@ namespace ReplicationManagerDA.DataAccess
                 //cmdComando = new MySqlCommand(strQuery, this._oConnection);
                 //cmdComando.ExecuteNonQuery();
 
-                strQuery =   "set @sql_query = '"+strEstament+"' ;";
+                //strQuery =   "set @sql_query = '"+strEstament+"' ;";
 
-                cmdComando = new MySqlCommand(strQuery, this._oConnection);
-                cmdComando.ExecuteNonQuery();
+                //cmdComando = new MySqlCommand(strQuery, this._oConnection);
+                //cmdComando.ExecuteNonQuery();
 
                 strQuery = "PREPARE ejecucion FROM @sql_query;";
                 cmdComando = new MySqlCommand(strQuery, this._oConnection);
+                cmdComando.Parameters.AddWithValue("@sql_query" , strEstament);
                 cmdComando.ExecuteNonQuery();
                 
                 strQuery = "EXECUTE ejecucion;";
