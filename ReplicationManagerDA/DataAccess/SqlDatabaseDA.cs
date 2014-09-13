@@ -384,7 +384,7 @@ namespace ReplicationManagerDA.DataAccess
         public Boolean CreateTriggerInsert(Table table)
         {
             bool result = false;
-
+            string strQuery = "";
 
             try
             {
@@ -398,7 +398,7 @@ namespace ReplicationManagerDA.DataAccess
                                             "(SELECT INSERTED." + string.Join(" FROM INSERTED) + ''', ''' + (SELECT INSERTED.", table.ListColumns) + " FROM INSERTED) " +
                                         " + ''' ) '";
 
-                string strQuery = " CREATE TRIGGER " + table.StrName + "_INSERT " +
+                strQuery = " CREATE TRIGGER " + table.StrName + "_INSERT " +
                                   " ON " + table.StrName +
                                   " AFTER INSERT " +
                                   " AS " + 

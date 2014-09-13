@@ -36,7 +36,7 @@ namespace TestRM
             column.StrName = "Prueba4";
             tabla.ListColumns.Add(column);
 
-            prueba.CreateTriggerInsert(tabla);
+            //prueba.CreateTriggerInsert(tabla);
 
 
         }
