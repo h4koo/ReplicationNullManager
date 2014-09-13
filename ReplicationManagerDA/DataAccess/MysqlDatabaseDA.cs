@@ -25,7 +25,6 @@ namespace ReplicationManagerDA.DataAccess
 
         private List<ReplicaLog> _listReplicaLogs;
 
-
         public MysqlDatabaseDA(string user, string password, string server, string port)
             : base(user, password, server, port, "test")
         {
@@ -177,7 +176,7 @@ namespace ReplicationManagerDA.DataAccess
         /// Return all logs that have not been synchronized
         /// </summary>
         /// <returns>A list of all the ReplicasLogs on the data base</returns>
-        public List<ReplicaLog> GetReplicaLogsUnsynchronized()
+        public List<ReplicaLog> GetReplicaLogsUnsynchronized(string strTable)
         {
             ReplicaLog oReplicaLog = new ReplicaLog();
             List<ReplicaLog> listResult = new List<ReplicaLog>();
@@ -190,15 +189,7 @@ namespace ReplicationManagerDA.DataAccess
             {
                 this.OpenConnection();
 
-                strQuery = "SELECT " +
-                                " idReplicaLog, " +
-                                " ReplicaTable, " +
-                                " ReplicaDatetime, " +
-                                " ReplicaTransaction, " +
-                                " IsSynchronized " +
-                            " FROM ReplicaLog " +
-                            " WHERE " +
-                                " IsSynchronized = 0 ";
+                strQuery = "SELECT idReplicaLog,  ReplicaTable,  ReplicaDatetime,  ReplicaTransaction, IsSynchronized FROM ReplicaLog WHERE IsSynchronized = 0 and ReplicaTable = '"+strTable.Trim()+"';";
 
                 MySqlCommand cmdComando = new MySqlCommand(strQuery, this._oConnection);
                 dtrResult = cmdComando.ExecuteReader();
@@ -215,7 +206,7 @@ namespace ReplicationManagerDA.DataAccess
                     oReplicaLog.StrReplicaTable = dtrFila["ReplicaTable"].ToString();
                     oReplicaLog.DtReplicaDatetime = Convert.ToDateTime(dtrFila["ReplicaDatetime"].ToString());
                     oReplicaLog.StrReplicaTransaction = dtrFila["ReplicaTransaction"].ToString();
-                    oReplicaLog.BlnIsSynchronized = Convert.ToBoolean(dtrFila["IsSynchronized"].ToString());
+                    oReplicaLog.BlnIsSynchronized = Convert.ToBoolean(dtrFila["IsSynchronized"]);
 
                     listResult.Add(oReplicaLog);
                 }
@@ -231,8 +222,39 @@ namespace ReplicationManagerDA.DataAccess
 
 
             return listResult;
-        }
+           }
 
+        public Boolean SetReplicaLogSync(ReplicaLog oreplicaLog)
+        {
+            Boolean result = false;
+
+            string strQuery = string.Empty;
+
+
+            try
+            {
+                this.OpenConnection();
+
+                strQuery = "UPDATE ReplicaLog SET IsSynchronized = 1 WHERE idReplicaLog = " + oreplicaLog.IntIdReplicaLog.ToString();
+
+                MySqlCommand cmdComando = new MySqlCommand(strQuery, this._oConnection);
+                cmdComando.ExecuteNonQuery();
+
+                result = true;
+
+            }
+            catch (Exception ex)
+            {
+                this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, strQuery);
+            }
+            finally
+            {
+                this.CloseConnection();
+            }
+
+
+            return result;
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -457,6 +479,57 @@ namespace ReplicationManagerDA.DataAccess
 
         }
 
+        public Boolean TableSync(string strTableName, string strEstament)
+        {
+            Boolean result = false;
+
+            string strQuery = string.Empty;
+
+            MySqlCommand cmdComando = null;
+
+            try
+            {
+                this.OpenConnection();
+
+                // Deshabilitamos el trigger
+                strQuery =   "set @ENABLE_TRIGGER_" + strTableName + " = FALSE;";
+
+                cmdComando = new MySqlCommand(strQuery, this._oConnection);
+                cmdComando.ExecuteNonQuery();
+
+                strQuery =   "set @sql_query = '"+strEstament+"' ;";
+
+                cmdComando = new MySqlCommand(strQuery, this._oConnection);
+                cmdComando.ExecuteNonQuery();
+
+                strQuery = "PREPARE ejecucion FROM @sql_query;";
+                cmdComando = new MySqlCommand(strQuery, this._oConnection);
+                cmdComando.ExecuteNonQuery();
+                
+                strQuery = "EXECUTE ejecucion;";
+                cmdComando = new MySqlCommand(strQuery, this._oConnection);
+                cmdComando.ExecuteNonQuery();
+
+                strQuery += "set @ENABLE_TRIGGER_" + strTableName + " = TRUE;";
+          
+                cmdComando = new MySqlCommand(strQuery, this._oConnection);
+                cmdComando.ExecuteNonQuery();
+                
+                result = true;
+
+            }
+            catch (Exception ex)
+            {
+                this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, strQuery);
+                result = false;
+            }
+            finally
+            {
+                this.CloseConnection();
+            }
+
+            return result;
+        }
 
         #region triggers
         /// <summary>
@@ -467,9 +540,11 @@ namespace ReplicationManagerDA.DataAccess
         /// <returns></returns>
         public string CreateTrigger(Table oTable, string triggerEvent){
             string querry = "CREATE TRIGGER " + oTable.StrName + "_" + triggerEvent + " AFTER " + triggerEvent + " ON " + oTable.StrName + " FOR EACH ROW BEGIN ";
-            querry += "DECLARE original_query VARCHAR(1024);";
-            querry += "SET original_query = (SELECT info FROM INFORMATION_SCHEMA.PROCESSLIST WHERE id = CONNECTION_ID());";
-            querry += "INSERT INTO replicalog values (null, '" + oTable.StrName + "', NOW(), " + "original_query" + ",0);";
+            querry += "DECLARE original_query VARCHAR(1024); ";
+            //querry += "IF @ENABLE_TRIGGER_" + oTable.StrName + " = TRUE THEN ";
+            querry += "SET original_query = (SELECT info FROM INFORMATION_SCHEMA.PROCESSLIST WHERE id = CONNECTION_ID()); ";
+            querry += "INSERT INTO replicalog values (null, '" + oTable.StrName + "', NOW(), " + "original_query" + ",0); ";
+            //querry += "END IF; ";
             querry += "END";
             return querry;
         }
@@ -654,7 +729,7 @@ namespace ReplicationManagerDA.DataAccess
         {
             try
             {
-                ListReplicaLogs = GetReplicaLogsUnsynchronized();
+                //ListReplicaLogs = GetReplicaLogsUnsynchronized();
 
                 if (ListReplicaLogs != null)
                 {

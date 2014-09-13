@@ -337,7 +337,7 @@ namespace ReplicationManagerDA.DataAccess
                     oColumn.StrType = dtrFila["TYPE_NAME"].ToString();
                     
                     //nchar is set but default on all engines is varchar
-                    if (oColumn.StrType.Equals("nchar") || oColumn.StrType.Equals("varchar"))
+                    if (oColumn.StrType.Equals("nchar") || oColumn.StrType.Equals("varchar") || oColumn.StrType.Equals("char"))
                     {
                         oColumn.StrType = "varchar("+dtrFila["PRECISION"].ToString()+")";
                     }
@@ -435,7 +435,7 @@ namespace ReplicationManagerDA.DataAccess
                 SqlCommand cmdComando = new SqlCommand(strQuery, this._oConnection);
 
                 cmdComando.ExecuteNonQuery();
-
+                result = true;
             }
             catch (Exception ex)
             {
@@ -548,7 +548,7 @@ namespace ReplicationManagerDA.DataAccess
             /// Return all logs that have not been synchronized
             /// </summary>
             /// <returns>A list of all the ReplicasLogs on the data base</returns>
-            public List<ReplicaLog> GetReplicaLogsUnsynchronized()
+            public List<ReplicaLog> GetReplicaLogsUnsynchronized(string strTable)
             {
                 ReplicaLog oReplicaLog = new ReplicaLog();
                 List<ReplicaLog> listResult = new List<ReplicaLog>();
@@ -561,15 +561,7 @@ namespace ReplicationManagerDA.DataAccess
                 {
                     this.OpenConnection();
 
-                    strQuery = "SELECT " +
-	                                " [idReplicaLog], " + 
-	                                " [ReplicaTable], " +
-	                                " [ReplicaDatetime], " +
-	                                " [ReplicaTransaction], " +
-	                                "[IsSynchronized]" +
-                                " FROM [dbo].[ReplicaLog] " +
-                                " WHERE " +
-	                                " [IsSynchronized] = 0 ";
+                    strQuery = "SELECT [idReplicaLog], [ReplicaTable], [ReplicaDatetime],[ReplicaTransaction], [IsSynchronized] FROM [dbo].[ReplicaLog] WHERE [IsSynchronized] = 0 and [ReplicaTable] = '"+strTable.Trim()+"'";
 
                     SqlCommand cmdComando = new SqlCommand(strQuery, this._oConnection);
                     dtrResult = cmdComando.ExecuteReader();
@@ -604,7 +596,37 @@ namespace ReplicationManagerDA.DataAccess
                 return listResult;
             }
 
+            public Boolean SetReplicaLogSync(ReplicaLog oreplicaLog)
+            {
+                Boolean result = false;
 
+                string strQuery = string.Empty;
+               
+
+                try
+                {
+                    this.OpenConnection();
+
+                    strQuery = "UPDATE ReplicaLog SET IsSynchronized = 1 WHERE idReplicaLog = " + oreplicaLog.IntIdReplicaLog.ToString();
+
+                    SqlCommand cmdComando = new SqlCommand(strQuery, this._oConnection);
+                    cmdComando.ExecuteNonQuery();
+
+                    result = true;
+                    
+                }
+                catch (Exception ex)
+                {
+                    this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, strQuery);
+                }
+                finally
+                {
+                    this.CloseConnection();
+                }
+
+
+                return result;
+            }
             /// <summary>
             /// Indicates that a ReplicaLog has been synchronized
             /// </summary>
@@ -643,7 +665,7 @@ namespace ReplicationManagerDA.DataAccess
             {
                 try
                 {
-                    ListReplicaLogs = GetReplicaLogsUnsynchronized();
+                    //ListReplicaLogs = GetReplicaLogsUnsynchronized();
 
                     if (ListReplicaLogs != null)
                     {

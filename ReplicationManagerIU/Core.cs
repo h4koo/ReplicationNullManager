@@ -8,7 +8,22 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ReplicationManagerDA.DataAccess;
+using ReplicationManagerBL;
 using UtilitariosCD.Entities;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using UtilitariosCD.Entities;
+using System.Data.SqlClient;
+using System.Data.SqlTypes;
+using System.Data;
+using UtilitariosCD.LogErrores;
+using UtilitariosCD.Constantes;
+using System.Reflection;
+using System.Threading;
 
 namespace ReplicationManagerIU
 {
@@ -38,10 +53,11 @@ namespace ReplicationManagerIU
         /// <summary>
         /// Method that is going to update the ReplicaView List so the GridView will be updated.
         /// </summary>
-        private void Reload_Replicas() {
+        private void Reload_Replicas()
+        {
             ReplicaDA replicaDA = new ReplicaDA();
             replicas = replicaDA.GetAllReplicas();
-            
+
             List<ReplicaView> replicasView = new List<ReplicaView>();
             if (replicas.Count > 0)
             {
@@ -81,6 +97,23 @@ namespace ReplicationManagerIU
                 btnEnableDisable.Enabled = false;
                 DGVReplicatorData.DataSource = null;
             }
+
+            if (replicas.Count > 0)
+            {
+                ReplicaBL replicaBL = new ReplicaBL();
+
+                Thread t = new Thread(new ThreadStart(delegate
+                {
+                    for (int i = 0; i < 100; i++)
+                    {
+                        this.Invoke((Action)delegate { foreach (Replica replicat in replicas) { if (replicat.BoolEnable) { replicaBL.CheckChangesReplica(replicat); } } });
+                        Thread.Sleep(1000);
+                    }
+                }));
+                t.IsBackground = true;
+                t.Start();
+
+            }
         }
 
         private void Core_Load(object sender, EventArgs e)
@@ -96,7 +129,8 @@ namespace ReplicationManagerIU
             {
                 replicaDA.Enable(selectedReplicaId);
             }
-            else {
+            else
+            {
                 replicaDA.Disable(selectedReplicaId);
             }
             Reload_Replicas();
@@ -111,7 +145,7 @@ namespace ReplicationManagerIU
         {
             int idReplica = replicas[DGVReplicatorData.CurrentCell.RowIndex].IntIdReplica;
             ReplicaDA replicaDA = new ReplicaDA();
-            replicaDA.Delete( idReplica );
+            replicaDA.Delete(idReplica);
             Reload_Replicas();
         }
 
@@ -124,7 +158,7 @@ namespace ReplicationManagerIU
         {
             LogViewer logViewer = new LogViewer();
             logViewer.Show();
-        
+
         }
     }
 }
