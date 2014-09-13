@@ -111,6 +111,7 @@ namespace ReplicationManagerBL
                     {
                         //mysqlDatabaseBL.TableSyncTerminal(replica,replicaLog);
                         mysqlDatabaseBL.SetReplicaSourceLogSync(replica, replicaLog);
+                        
                     }
                 }
             }
@@ -123,7 +124,7 @@ namespace ReplicationManagerBL
                     if (replica.StrSourceEngine.Contains("SQL Server"))
                     {
                         sqlDatabaseBL.TableSyncSource(replica, replicaLog);
-                        sqlDatabaseBL.SetReplicaTerminalLogSync(replica, replicaLog);
+                        //sqlDatabaseBL.SetReplicaTerminalLogSync(replica, replicaLog);
                     }
                     if (replica.StrSourceEngine.Contains("MySQL"))
                     {
