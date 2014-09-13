@@ -381,30 +381,39 @@ namespace ReplicationManagerDA.DataAccess
             return oTable;
         }
 
-        public Boolean CreateTriggerInsert(Table table)
+
+        public Boolean CreateTrigger(Table table)
         {
             bool result = false;
-
+            string strQuery = string.Empty;
 
             try
             {
 
-                string strTransaction = "' INSERT INTO " + table.StrName + 
-                                        " ( " + 
-                                        string.Join(",", table.ListColumns) +
-                                        " ) " + 
-                                        " VALUES " + 
-                                        " ( ''' + " +
-                                            "(SELECT INSERTED." + string.Join(" FROM INSERTED) + ''', ''' + (SELECT INSERTED.", table.ListColumns) + " FROM INSERTED) " +
-                                        " + ''' ) '";
-
-                string strQuery = " CREATE TRIGGER " + table.StrName + "_INSERT " +
+                strQuery = " CREATE TRIGGER " + table.StrName + "_Trigger " +
                                   " ON " + table.StrName +
-                                  " AFTER INSERT " +
-                                  " AS " + 
-                                  " BEGIN " + 
+                                  " AFTER INSERT, UPDATE, DELETE " +
+                                  " AS " +
+                                  " BEGIN " +
                                   " " +
-                                  "     INSERT INTO ReplicaLog " + 
+                                  "" +
+                                  "" +
+                                  "     DECLARE @LASTCOMMAND  NVARCHAR(MAX);" +
+                                  "     DECLARE @SQLBuffer NVARCHAR(4000);" +
+                                  "" +
+                                  "     DECLARE @ReplicaLog TABLE (" +
+                                  "             EventType NVARCHAR(30)," +
+                                  "             Parameters INT," +
+                                  "             EventInfo NVARCHAR(4000)" +
+                                  "     )" +
+                                  "     INSERT @ReplicaLog" +
+                                  "     EXEC sp_executesql N'DBCC INPUTBUFFER(@@spid) WITH NO_INFOMSGS'" +
+                                  "" +
+                                  "     SELECT @LASTCOMMAND = EventInfo " +
+                                  "     FROM @ReplicaLog" +
+                                  "" +
+                                  "" +
+                                  "     INSERT INTO ReplicaLog " +
                                   "     ( " +
                                   "         ReplicaTable " +
                                   "         ,ReplicaDatetime " +
@@ -415,10 +424,10 @@ namespace ReplicationManagerDA.DataAccess
                                   "     ( " +
                                   "         '" + table.StrName + "'" +
                                   "         ,GETDATE() " +
-                                  "         , " + strTransaction + 
+                                  "         ,@LASTCOMMAND" +
                                   "         ,0 " +
                                   "     ) " +
-                                  " " + 
+                                  " " +
                                   " END";
 
 
@@ -433,7 +442,52 @@ namespace ReplicationManagerDA.DataAccess
                 this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, strQuery);
                 result = false;
             }
+            finally
+            {
+                this.CloseConnection();
+            }
 
+
+            return result;
+        }
+
+
+        public Boolean TableSync(string strTableName, string strEstament)
+        {
+            Boolean result = false;
+
+            string strQuery = string.Empty;
+
+            SqlCommand cmdComando = null;
+
+            try
+            {
+                this.OpenConnection();
+
+                // Deshabilitamos el trigger
+                strQuery = "DISABLE TRIGGER " + strTableName + "_Trigger ON " + strTableName + ";";
+                cmdComando = new SqlCommand(strQuery, this._oConnection);
+
+
+                // Ejecutamos la setencia enviada por parámetro.
+                cmdComando = new SqlCommand(strEstament, this._oConnection);
+
+
+                // Habilitamos el trigger
+                strQuery = "ENABLE TRIGGER " + strTableName + "_Trigger ON " + strTableName + ";";
+                cmdComando = new SqlCommand(strQuery, this._oConnection);
+
+
+            }
+            catch (Exception ex)
+            {
+                this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, strQuery);
+                result = false;
+            }
+                finally
+            {
+                this.CloseConnection();
+            }
 
             return result;
         }
