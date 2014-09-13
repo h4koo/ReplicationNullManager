@@ -4,13 +4,29 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3B1AA612-E0CF-4BDD-9564-49447480608B}</ProjectGuid>
+    <ProjectGuid>{4277CD5D-B400-42C3-8638-A39C8461EEE1}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ReplicationManagerIU</RootNamespace>
-    <AssemblyName>ReplicationManagerIU</AssemblyName>
+    <RootNamespace>ProyectoX</RootNamespace>
+    <AssemblyName>ProyectoX</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>C:\Users\ACER\Documents\Cursos\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -31,7 +47,20 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>98FDABD0BA4054B6775E55DE6B353D35CF81885F</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>ProyectoX_ClaveTemporal.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MySql.Data, Version=6.8.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,37 +73,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddEntry.cs">
+    <Compile Include="DataAccess\ProyectoXDA.cs" />
+    <Compile Include="ProyectoX.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddEntry.Designer.cs">
-      <DependentUpon>AddEntry.cs</DependentUpon>
-    </Compile>
-    <Compile Include="App.cs" />
-    <Compile Include="Core.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Core.Designer.cs">
-      <DependentUpon>Core.cs</DependentUpon>
-    </Compile>
-    <Compile Include="LogViewer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="LogViewer.Designer.cs">
-      <DependentUpon>LogViewer.cs</DependentUpon>
+    <Compile Include="ProyectoX.Designer.cs">
+      <DependentUpon>ProyectoX.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReplicaView.cs" />
-    <EmbeddedResource Include="AddEntry.resx">
-      <DependentUpon>AddEntry.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Core.resx">
-      <DependentUpon>Core.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="LogViewer.resx">
-      <DependentUpon>LogViewer.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -84,6 +91,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ProyectoX.resx">
+      <DependentUpon>ProyectoX.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -93,23 +103,33 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="ProyectoX_ClaveTemporal.pfx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ReplicationManagerBL\ReplicationManagerBL.csproj">
-      <Project>{57cc055f-e121-4a9b-a897-6e0d88365344}</Project>
-      <Name>ReplicationManagerBL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ReplicationManagerDA\ReplicationManagerDA.csproj">
-      <Project>{f728e3d7-d379-40c7-aa4c-646abceb51a0}</Project>
-      <Name>ReplicationManagerDA</Name>
-    </ProjectReference>
     <ProjectReference Include="..\UtilitariosCD\UtilitariosRM.csproj">
       <Project>{cd781605-2b45-40a5-a407-8b8c36a5c2f4}</Project>
       <Name>UtilitariosRM</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 y x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -20,6 +20,10 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "ReplicationManagerDB", "Rep
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRM", "TestRM\TestRM.csproj", "{A0ED0D3F-6583-47F5-BCF5-2C4169984599}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProyectoX", "ProyectoX\ProyectoX.csproj", "{4277CD5D-B400-42C3-8638-A39C8461EEE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProyectoZ", "ProyectoZ\ProyectoZ.csproj", "{7F729CD6-9E32-4C55-BF45-656F833CB02C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +54,14 @@ Global
 		{A0ED0D3F-6583-47F5-BCF5-2C4169984599}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0ED0D3F-6583-47F5-BCF5-2C4169984599}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0ED0D3F-6583-47F5-BCF5-2C4169984599}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4277CD5D-B400-42C3-8638-A39C8461EEE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4277CD5D-B400-42C3-8638-A39C8461EEE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4277CD5D-B400-42C3-8638-A39C8461EEE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4277CD5D-B400-42C3-8638-A39C8461EEE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F729CD6-9E32-4C55-BF45-656F833CB02C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F729CD6-9E32-4C55-BF45-656F833CB02C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F729CD6-9E32-4C55-BF45-656F833CB02C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F729CD6-9E32-4C55-BF45-656F833CB02C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
