@@ -11,7 +11,7 @@ using ReplicationManagerDA.Observer_Design_Pattern;
 
 namespace ReplicationManagerDA
 {
-    public class SqlServerDA : Observable
+    public class SqlServerDA : Observable, ServerDA
     {
         public LogErrores _oLogErrors;
         public SqlConnection _oConnection;
@@ -101,5 +101,7 @@ namespace ReplicationManagerDA
                 _oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message);
             }
         }
+    
+
     }
 }

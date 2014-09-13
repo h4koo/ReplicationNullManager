@@ -14,7 +14,7 @@ using System.Threading;
 
 namespace ReplicationManagerDA.DataAccess
 {
-    public class SqlDatabaseDA : SqlServerDA
+    public class SqlDatabaseDA : SqlServerDA , DatabaseDA
     {
 
         private List<ReplicaLog> _listReplicaLogs;
@@ -222,7 +222,7 @@ namespace ReplicationManagerDA.DataAccess
                                          "[idReplicaLog] [int] IDENTITY(1,1) NOT NULL," +
                                          "[ReplicaTable] [nchar](30) NOT NULL," +
                                          "[ReplicaDatetime] [datetime] NOT NULL," +
-                                         "[ReplicaTransaction] [nchar](100) NOT NULL," +
+                                         "[ReplicaTransaction] text NOT NULL," +
                                          "[IsSynchronized] [bit] NOT NULL default 0" +
                                          ") ON [PRIMARY]";
 

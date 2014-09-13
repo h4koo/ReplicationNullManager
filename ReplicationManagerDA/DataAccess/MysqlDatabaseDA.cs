@@ -16,11 +16,12 @@ using System.Data;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 using MySql.Data.Types;
+using ReplicationManagerAD;
 using System.Threading;
 
 namespace ReplicationManagerDA.DataAccess
 {
-    public class MysqlDatabaseDA : MysqlServerDA
+    public class MysqlDatabaseDA : MysqlServerDA , DatabaseDA
     {
 
         private List<ReplicaLog> _listReplicaLogs;
@@ -152,7 +153,7 @@ namespace ReplicationManagerDA.DataAccess
                                 "`idReplicaLog` int(11) NOT NULL AUTO_INCREMENT," +
                                 "`ReplicaTable` varchar(30) NOT NULL," +
                                 "`ReplicaDatetime` datetime NOT NULL," +
-                                "`ReplicaTransaction` varchar(100) NOT NULL," +
+                                "`ReplicaTransaction` text NOT NULL," +
                                 "`IsSynchronized` BIT NOT NULL DEFAULT 0," + 
                             "PRIMARY KEY (`idReplicaLog`)" +
                             ") ENGINE=InnoDB DEFAULT CHARSET=utf8;";

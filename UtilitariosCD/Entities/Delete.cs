@@ -14,8 +14,8 @@ namespace UtilitariosCD.Entities
 
         public Delete()
         {
-           strCondition = string.Empty();
-           strTableName = string.Empty();
+           strCondition = string.Empty;
+           strTableName = string.Empty;
         }
 
         public override string ToString()

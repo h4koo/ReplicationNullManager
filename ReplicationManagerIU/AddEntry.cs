@@ -8,12 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using UtilitariosCD.Entities;
-using ReplicationManagerDA.DataAccess;
 
+using ReplicationManagerBL;
 namespace ReplicationManagerIU
 {
     public partial class AddEntry : Form
     {
+        ReplicaBL replicaBL = new ReplicaBL();
         public AddEntry()
         {
             InitializeComponent();
@@ -60,8 +61,7 @@ namespace ReplicationManagerIU
         /// <param name="e">Related to the UI C#</param>
         private void AddEntry_Load(object sender, EventArgs e)
         {
-            EngineDA EnginesDA = new EngineDA();
-            List<Engine> Engines = EnginesDA.GetAllSupportedEngines();
+            List<Engine> Engines = (new ReplicaBL()).GetAllEngines();
 
             if (Engines.Count > 0)
             {
@@ -99,55 +99,14 @@ namespace ReplicationManagerIU
             newReplica.StrTerminalUser = tbEndPointUser.Text;
             newReplica.StrTerminalPassword = tbEndPointPassword.Text;
             newReplica.StrTerminalDatabase = cbEndPointDatabase.Text;
-            ReplicaDA replicaDA = new ReplicaDA();
-            replicaDA.Insert(newReplica);
-            InitialReplicaClientConfig(newReplica);
+            
+            replicaBL.InsertReplica(newReplica);
+            replicaBL.InitialReplicaClientConfig(newReplica);
             this.Close();
 
-
-            //MessageBox.Show((cbEndPointEngine.SelectedItem as Engine).IntIdEngine.ToString());
-            
         }
 
-        /// <summary>
-        /// This will configure the Initial Replica requirements on the client
-        /// </summary>
-        /// <param name="replica"></param>
-        public void InitialReplicaClientConfig(Replica replica){
-            //Source Config
-            Table table = new Table();
-            List<Insert> valuesToInsert = new List<Insert>();
-            if (replica.StrSourceEngine.Contains("SQL Server")){
-                SqlDatabaseDA sqlDatabaseAccess = new SqlDatabaseDA(replica.StrSourceUser, replica.StrSourcePassword, replica.StrSourceIPAddress, replica.IntSourcePort.ToString(), replica.StrSourceDatabase);
-                sqlDatabaseAccess.CreateReplicaLogs();
-                //GEtTabe
-                table = sqlDatabaseAccess.getTableStructure(replica.StrSourceDatabase, replica.StrSourceTable);
-                valuesToInsert = sqlDatabaseAccess.GetCurrentRows(table);     
-            }
-            if (replica.StrSourceEngine.Contains("MySQL"))
-            {
-                MysqlDatabaseDA sqlDatabaseAccess = new MysqlDatabaseDA(replica.StrSourceUser, replica.StrSourcePassword, replica.StrSourceIPAddress, replica.IntSourcePort.ToString(), replica.StrSourceDatabase);
-                sqlDatabaseAccess.CreateReplicaLogs();
-                table = sqlDatabaseAccess.getTableStructure(replica.StrSourceDatabase, replica.StrSourceTable);
-                valuesToInsert = sqlDatabaseAccess.GetCurrentRows(table);
-            }
-            //Terminal Config
-            if (replica.StrTerminalEngine.Contains("SQL Server"))
-            {
-                SqlDatabaseDA sqlDatabaseAccess = new SqlDatabaseDA(replica.StrTerminalUser , replica.StrTerminalPassword, replica.StrTerminalIPAddress, replica.IntTerminalPort.ToString(), replica.StrTerminalDatabase);
-                sqlDatabaseAccess.CreateReplicaLogs();
-                sqlDatabaseAccess.createTable(table);
-                sqlDatabaseAccess.ExecuteMultipleInsert(valuesToInsert);
-            }
-            if (replica.StrTerminalEngine.Contains("MySQL"))
-            {
-                MysqlDatabaseDA sqlDatabaseAccess = new MysqlDatabaseDA(replica.StrTerminalUser, replica.StrTerminalPassword, replica.StrTerminalIPAddress, replica.IntTerminalPort.ToString(), replica.StrTerminalDatabase);
-                sqlDatabaseAccess.CreateReplicaLogs();
-                sqlDatabaseAccess.createTable(table);
-                sqlDatabaseAccess.ExecuteMultipleInsert(valuesToInsert);
-                //MessageBox.Show(table.ToString());
-            }
-        }
+        
 
         /// <summary>
         /// Test Conection in order to get the Complete DB list on the Engine
@@ -167,14 +126,11 @@ namespace ReplicationManagerIU
             List<Database> listDatabases = new List<Database>();
 
             if ((cbSourceEngine.SelectedItem as Engine).StrName.Contains("SQL Server")){
-
-                SqlDatabaseDA sqlDatabaseDA = new SqlDatabaseDA(user,password,server,port);
-                listDatabases = sqlDatabaseDA.GetAllDatabases();
+                listDatabases = replicaBL.GetSqlDatabases(user, password, server, port);
             }
             if ((cbSourceEngine.SelectedItem as Engine).StrName.Contains("MySQL"))
             {
-                MysqlDatabaseDA sqlDatabaseDA = new MysqlDatabaseDA(user, password, server, port);
-                listDatabases = sqlDatabaseDA.GetAllDatabases();
+                listDatabases = replicaBL.GetMySqlDatabases(user, password, server, port);
             }
 
             if (listDatabases.Count <= 0)
@@ -215,17 +171,14 @@ namespace ReplicationManagerIU
 
             if ((cbSourceEngine.SelectedItem as Engine).StrName.Contains("SQL Server"))
             {
-
-                SqlDatabaseDA sqlDatabaseDA = new SqlDatabaseDA(user, password, server, port, database);
-                listTables = sqlDatabaseDA.GetAllTables(database);
+                listTables = replicaBL.GetSqlTables(user,password,server,port,database);
             }
+
             if ((cbSourceEngine.SelectedItem as Engine).StrName.Contains("MySQL"))
             {
-
-                MysqlDatabaseDA sqlDatabaseDA = new MysqlDatabaseDA(user, password, server, port, database);
-                listTables = sqlDatabaseDA.GetAllTables(database);
+                listTables = replicaBL.GetMySqlTables(user,password,server,port,database);
+                
             }
-
 
             if (listTables.Count <= 0)
             {
@@ -254,13 +207,11 @@ namespace ReplicationManagerIU
 
             if ((cbEndPointEngine.SelectedItem as Engine).StrName.Contains("SQL Server"))
             {
-                SqlDatabaseDA sqlDatabaseDA = new SqlDatabaseDA(user, password, server, port);
-                listDatabases = sqlDatabaseDA.GetAllDatabases();
+                listDatabases = replicaBL.GetSqlDatabases(user,password,server,port);
             }
             if ((cbEndPointEngine.SelectedItem as Engine).StrName.Contains("MySQL"))
             {
-                MysqlDatabaseDA sqlDatabaseDA = new MysqlDatabaseDA(user, password, server, port);
-                listDatabases = sqlDatabaseDA.GetAllDatabases();
+                listDatabases = replicaBL.GetMySqlDatabases(user, password, server, port);
             }
             if (listDatabases.Count <= 0)
             {
