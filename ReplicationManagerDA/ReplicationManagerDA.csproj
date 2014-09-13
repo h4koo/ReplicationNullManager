@@ -44,7 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Clases\ConectorMySQL.cs" />
     <Compile Include="DataAccess\MysqlDatabaseDA.cs" />
     <Compile Include="DataAccess\MysqlServerDA.cs" />
     <Compile Include="DataAccess\SqlDatabaseDA.cs" />
