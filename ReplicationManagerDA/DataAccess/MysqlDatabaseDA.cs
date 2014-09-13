@@ -459,57 +459,73 @@ namespace ReplicationManagerDA.DataAccess
         }
 
 
-        #region triggers
-
-        /// <summary>
-        /// Crea un trigger de actualizacion para una tabla insertada como parametro
-        /// que llene la tabla log
-        /// </summary>
-        /// <param name="pTabla"></param>
-        /// <returns></returns>
-        public string crearTriggerInsert(Table pTabla)
-        {
-            string querry = "DELIMITER | CREATE TRIGGER " + pTabla.StrName + "_" + "INSERT " + " AFTER " + " INSERT " + " ON " + pTabla.StrName + " FOR EACH ROW BEGIN ";
-            querry += "DECLARE original_query VARCHAR(1024);";
-            querry += "SET original_query = (SELECT info FROM INFORMATION_SCHEMA.PROCESSLIST WHERE id = CONNECTION_ID());";
-            querry += "INSERT INTO replicalog values (null, '" + pTabla.StrName + "', NOW(), " + "original_query" + ",0);";
-            querry += "END| DELIMITER ;";
-            return querry;
+        public bool TableSync(string pTabla, string pQuerry){
+            try
+            {
+                string sentencia = "set @ENABLE_TRIGGER_persona = false;";
+                sentencia += "set @variable = " + pQuerry + "; PREPARE ejecucion FROM @variable;";
+                sentencia += "EXECUTE ejecucion;";
+                sentencia = "set @ENABLE_TRIGGER_persona = true;";
+                return true;
+            }
+            catch (Exception) {
+                return false;
+            }
         }
 
-        /// <summary>
-        /// Crea un trigger de actualizacion para una tabla insertada como parametro
-        /// que llene la tabla log
-        /// </summary>
-        /// <param name="pTabla"></param>
-        /// <returns></returns>
+
+        #region triggers
+
+
+        public string crearTriggerInsert(Table pTabla)
+        {
+
+            string querry = "DELIMITER | CREATE TRIGGER " + pTabla.StrName + "_" + "INSERT " + " AFTER " + " INSERT " + " ON " + pTabla.StrName + " FOR EACH ROW BEGIN ";
+            querry += "DECLARE original_query VARCHAR(1024);";
+
+            querry += "IF (@ENABLE_TRIGGER_" + pTabla.StrName + "= TRUE) THEN ";
+
+            querry += "SET original_query = (SELECT info FROM INFORMATION_SCHEMA.PROCESSLIST WHERE id = CONNECTION_ID());";
+            querry += "INSERT INTO replicalog values (null, '" + pTabla.StrName + "', NOW(), " + "original_query" + ",0);";
+
+            querry += "END IF; ";
+
+            querry += "END| DELIMITER ;";
+            return querry;
+
+        }
+
         public string crearTriggerUpdate(Table pTabla)
         {
             string querry = "DELIMITER | CREATE TRIGGER " + pTabla.StrName + "_" + "UPDATE " + " AFTER " + " UPDATE " + " ON " + pTabla.StrName + " FOR EACH ROW BEGIN ";
             querry += "DECLARE original_query VARCHAR(1024);";
+            querry += "IF (@ENABLE_TRIGGER_" + pTabla.StrName + "= TRUE) THEN ";
             querry += "SET original_query = (SELECT info FROM INFORMATION_SCHEMA.PROCESSLIST WHERE id = CONNECTION_ID());";
             querry += "INSERT INTO replicalog values (null, '" + pTabla.StrName + "', NOW(), " + "original_query" + ",0);";
+
+            querry += "END IF; ";
+
             querry += "END| DELIMITER ;";
             return querry;
         }
 
-        /// <summary>
-        /// Crea un trigger de borrado para una tabla insertada como parametro
-        /// que llene la tabla log
-        /// </summary>
-        /// <param name="pTabla"></param>
-        /// <returns></returns>
         public string crearTriggerDelete(Table pTabla)
         {
             string querry = "DELIMITER | CREATE TRIGGER " + pTabla.StrName + "_" + "DELETE " + " AFTER " + " DELETE " + " ON " + pTabla.StrName + " FOR EACH ROW BEGIN ";
             querry += "DECLARE original_query VARCHAR(1024);";
+
+            querry += "IF (@ENABLE_TRIGGER_" + pTabla.StrName + "= TRUE) THEN ";
+
             querry += "SET original_query = (SELECT info FROM INFORMATION_SCHEMA.PROCESSLIST WHERE id = CONNECTION_ID());";
             querry += "INSERT INTO replicalog values (null, '" + pTabla.StrName + "', NOW(), " + "original_query" + ",0);";
+
+            querry += "END IF; ";
+
             querry += "END| DELIMITER ;";
             return querry;
         }
-        #endregion
 
+        #endregion
 
 
         #region Observer
@@ -592,3 +608,6 @@ namespace ReplicationManagerDA.DataAccess
         #endregion
     }
 }
+
+
+
