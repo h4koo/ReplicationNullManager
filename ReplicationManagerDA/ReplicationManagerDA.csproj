@@ -50,10 +50,12 @@
     <Compile Include="DataAccess\SqlDatabaseDA.cs" />
     <Compile Include="DataAccess\EngineDA.cs" />
     <Compile Include="DataAccess\ReplicaDA.cs" />
+    <Compile Include="DatabaseDA.cs" />
     <Compile Include="Observer Design Pattern\Observable.cs" />
     <Compile Include="Observer Design Pattern\Observer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataAccess\SqlServerDA.cs" />
+    <Compile Include="ServerDA.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\UtilitariosCD\UtilitariosRM.csproj">

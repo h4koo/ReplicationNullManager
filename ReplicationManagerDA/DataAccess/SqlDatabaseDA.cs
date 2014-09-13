@@ -14,7 +14,7 @@ using System.Threading;
 
 namespace ReplicationManagerDA.DataAccess
 {
-    public class SqlDatabaseDA : SqlServerDA
+    public class SqlDatabaseDA : SqlServerDA , DatabaseDA
     {
 
         private List<ReplicaLog> _listReplicaLogs;

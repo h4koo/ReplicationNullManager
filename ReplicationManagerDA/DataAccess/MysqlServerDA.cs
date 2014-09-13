@@ -13,7 +13,7 @@ using MySql.Data.Types;
 using ReplicationManagerDA.Observer_Design_Pattern;
 namespace ReplicationManagerDA.DataAccess
 {
-    public class MysqlServerDA : Observable
+    public class MysqlServerDA : Observable , ServerDA
     {
         public LogErrores _oLogErrors;
         

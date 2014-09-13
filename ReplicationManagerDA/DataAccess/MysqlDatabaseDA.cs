@@ -21,7 +21,7 @@ using System.Threading;
 
 namespace ReplicationManagerDA.DataAccess
 {
-    public class MysqlDatabaseDA : MysqlServerDA
+    public class MysqlDatabaseDA : MysqlServerDA , DatabaseDA
     {
 
         private List<ReplicaLog> _listReplicaLogs;

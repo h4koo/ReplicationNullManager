@@ -99,8 +99,6 @@ namespace ReplicationManagerIU
             newReplica.StrTerminalUser = tbEndPointUser.Text;
             newReplica.StrTerminalPassword = tbEndPointPassword.Text;
             newReplica.StrTerminalDatabase = cbEndPointDatabase.Text;
-
-
             
             replicaBL.InsertReplica(newReplica);
             replicaBL.InitialReplicaClientConfig(newReplica);
