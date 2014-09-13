@@ -10,8 +10,7 @@ using MySql.Data;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 using MySql.Data.Types;
-using ReplicationManagerBL.Observer_Design_Pattern;
-
+using ReplicationManagerDA.Observer_Design_Pattern;
 namespace ReplicationManagerDA.DataAccess
 {
     public class MysqlServerDA : Observable

@@ -16,7 +16,7 @@ using System.Data;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 using MySql.Data.Types;
-using ReplicationManagerBL.Observer_Design_Pattern;
+using ReplicationManagerAD;
 using System.Threading;
 
 namespace ReplicationManagerDA.DataAccess

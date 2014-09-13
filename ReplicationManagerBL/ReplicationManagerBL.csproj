@@ -47,6 +47,10 @@
       <Project>{f728e3d7-d379-40c7-aa4c-646abceb51a0}</Project>
       <Name>ReplicationManagerDA</Name>
     </ProjectReference>
+    <ProjectReference Include="..\UtilitariosCD\UtilitariosRM.csproj">
+      <Project>{cd781605-2b45-40a5-a407-8b8c36a5c2f4}</Project>
+      <Name>UtilitariosRM</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
