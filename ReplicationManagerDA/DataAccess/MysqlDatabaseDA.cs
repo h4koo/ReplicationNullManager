@@ -468,8 +468,10 @@ namespace ReplicationManagerDA.DataAccess
         public string CreateTrigger(Table oTable, string triggerEvent){
             string querry = "CREATE TRIGGER " + oTable.StrName + "_" + triggerEvent + " AFTER " + triggerEvent + " ON " + oTable.StrName + " FOR EACH ROW BEGIN ";
             querry += "DECLARE original_query VARCHAR(1024);";
+            querry += "IF (@ENABLE_TRIGGER_" + oTable.StrName + "= TRUE) THEN ";
             querry += "SET original_query = (SELECT info FROM INFORMATION_SCHEMA.PROCESSLIST WHERE id = CONNECTION_ID());";
             querry += "INSERT INTO replicalog values (null, '" + oTable.StrName + "', NOW(), " + "original_query" + ",0);";
+            querry += "END IF; ";
             querry += "END";
             return querry;
         }

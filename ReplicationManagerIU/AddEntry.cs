@@ -8,13 +8,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using UtilitariosCD.Entities;
-
+using ReplicationManagerDA.Observer_Design_Pattern;
 using ReplicationManagerBL;
 namespace ReplicationManagerIU
 {
-    public partial class AddEntry : Form
+    public partial class AddEntry : Form 
     {
         ReplicaBL replicaBL = new ReplicaBL();
+        SqlDatabaseBL SQLBL = new SqlDatabaseBL();
+        MysqlDatabaseBL MYSQLBL = new MysqlDatabaseBL();
+
         public AddEntry()
         {
             InitializeComponent();
@@ -126,11 +129,11 @@ namespace ReplicationManagerIU
             List<Database> listDatabases = new List<Database>();
 
             if ((cbSourceEngine.SelectedItem as Engine).StrName.Contains("SQL Server")){
-                listDatabases = replicaBL.GetSqlDatabases(user, password, server, port);
+                listDatabases = SQLBL.GetDatabases(user, password, server, port);
             }
             if ((cbSourceEngine.SelectedItem as Engine).StrName.Contains("MySQL"))
             {
-                listDatabases = replicaBL.GetMySqlDatabases(user, password, server, port);
+                listDatabases = MYSQLBL.GetDatabases(user, password, server, port);
             }
 
             if (listDatabases.Count <= 0)
@@ -171,12 +174,12 @@ namespace ReplicationManagerIU
 
             if ((cbSourceEngine.SelectedItem as Engine).StrName.Contains("SQL Server"))
             {
-                listTables = replicaBL.GetSqlTables(user,password,server,port,database);
+                listTables = SQLBL.GetTables(user,password,server,port,database);
             }
 
             if ((cbSourceEngine.SelectedItem as Engine).StrName.Contains("MySQL"))
             {
-                listTables = replicaBL.GetMySqlTables(user,password,server,port,database);
+                listTables = MYSQLBL.GetTables(user,password,server,port,database);
                 
             }
 
@@ -207,11 +210,11 @@ namespace ReplicationManagerIU
 
             if ((cbEndPointEngine.SelectedItem as Engine).StrName.Contains("SQL Server"))
             {
-                listDatabases = replicaBL.GetSqlDatabases(user,password,server,port);
+                listDatabases = SQLBL.GetDatabases(user,password,server,port);
             }
             if ((cbEndPointEngine.SelectedItem as Engine).StrName.Contains("MySQL"))
             {
-                listDatabases = replicaBL.GetMySqlDatabases(user, password, server, port);
+                listDatabases =  MYSQLBL.GetDatabases(user, password, server, port);
             }
             if (listDatabases.Count <= 0)
             {
