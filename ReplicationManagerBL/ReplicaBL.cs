@@ -38,6 +38,10 @@ namespace ReplicationManagerBL
                 sqlDatabaseAccess.CreateReplicaLogs();
                 table = sqlDatabaseAccess.getTableStructure(replica.StrSourceDatabase, replica.StrSourceTable);
                 valuesToInsert = sqlDatabaseAccess.GetCurrentRows(table);
+                sqlDatabaseAccess.CreateTriggerDelete(table);
+                sqlDatabaseAccess.CreateTriggerInsert(table);
+                sqlDatabaseAccess.CreateTriggerUpdate(table);
+
             }
             //Terminal Config
             if (replica.StrTerminalEngine.Contains("SQL Server"))
@@ -53,6 +57,9 @@ namespace ReplicationManagerBL
                 sqlDatabaseAccess.CreateReplicaLogs();
                 sqlDatabaseAccess.createTable(table);
                 sqlDatabaseAccess.ExecuteMultipleInsert(valuesToInsert);
+                sqlDatabaseAccess.CreateTriggerDelete(table);
+                sqlDatabaseAccess.CreateTriggerInsert(table);
+                sqlDatabaseAccess.CreateTriggerUpdate(table);
             }
         }
         /// <summary>

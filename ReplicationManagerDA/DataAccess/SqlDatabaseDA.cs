@@ -393,8 +393,8 @@ namespace ReplicationManagerDA.DataAccess
                 strQuery = " CREATE TRIGGER " + table.StrName + "_Trigger " +
                                   " ON " + table.StrName +
                                   " AFTER INSERT, UPDATE, DELETE " +
-                                  " AS " +
-                                  " BEGIN " +
+                                  " AS " + 
+                                  " BEGIN " + 
                                   " " +
                                   "" +
                                   "" +
@@ -413,7 +413,7 @@ namespace ReplicationManagerDA.DataAccess
                                   "     FROM @ReplicaLog" +
                                   "" +
                                   "" +
-                                  "     INSERT INTO ReplicaLog " +
+                                  "     INSERT INTO ReplicaLog " + 
                                   "     ( " +
                                   "         ReplicaTable " +
                                   "         ,ReplicaDatetime " +
@@ -427,7 +427,7 @@ namespace ReplicationManagerDA.DataAccess
                                   "         ,@LASTCOMMAND" +
                                   "         ,0 " +
                                   "     ) " +
-                                  " " +
+                                  " " + 
                                   " END";
 
 

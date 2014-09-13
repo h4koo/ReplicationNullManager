@@ -16,7 +16,6 @@ using System.Data;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 using MySql.Data.Types;
-using ReplicationManagerAD;
 using System.Threading;
 
 namespace ReplicationManagerDA.DataAccess
@@ -456,7 +455,163 @@ namespace ReplicationManagerDA.DataAccess
             }
             return result;
 
-        } 
+        }
+
+
+        #region triggers
+        /// <summary>
+        /// General Trigger Creator
+        /// </summary>
+        /// <param name="oTable"></param>
+        /// <param name="triggerEvent"></param>
+        /// <returns></returns>
+        public string CreateTrigger(Table oTable, string triggerEvent){
+            string querry = "CREATE TRIGGER " + oTable.StrName + "_" + triggerEvent + " AFTER " + triggerEvent + " ON " + oTable.StrName + " FOR EACH ROW BEGIN ";
+            querry += "DECLARE original_query VARCHAR(1024);";
+            querry += "SET original_query = (SELECT info FROM INFORMATION_SCHEMA.PROCESSLIST WHERE id = CONNECTION_ID());";
+            querry += "INSERT INTO replicalog values (null, '" + oTable.StrName + "', NOW(), " + "original_query" + ",0);";
+            querry += "END";
+            return querry;
+        }
+
+        /// <summary>
+        /// Crea un trigger de actualizacion para una tabla insertada como parametro
+        /// que llene la tabla log
+        /// </summary>
+        /// <param name="pTabla"></param>
+        /// <returns></returns>
+        public string CreateInsertTriggerSQL(Table oTable)
+        {
+            return this.CreateTrigger(oTable,"INSERT");
+        }
+
+        /// <summary>
+        /// Crea un trigger de actualizacion para una tabla insertada como parametro
+        /// que llene la tabla log
+        /// </summary>
+        /// <param name="pTabla"></param>
+        /// <returns></returns>
+        public string CreateUpdateTriggerSQL(Table oTable)
+        {
+            return this.CreateTrigger(oTable,"UPDATE");
+        }
+
+        /// <summary>
+        /// Crea un trigger de borrado para una tabla insertada como parametro
+        /// que llene la tabla log
+        /// </summary>
+        /// <param name="pTabla"></param>
+        /// <returns></returns>
+        /// 
+        public string CreateDeleteTriggerSQL(Table oTable)
+        {
+            return this.CreateTrigger(oTable,"DELETE");
+        }
+        
+        /// <summary>
+        /// Method to create Trigger
+        /// </summary>
+        /// <param name="insert"></param>
+        /// <returns></returns>
+        public Boolean CreateTriggerInsert(Table oTable)
+        {
+            Boolean result = false;
+            string strQuery = this.CreateInsertTriggerSQL(oTable);
+
+            MySqlDataReader dtrResult = null;
+            DataTable dtResult = new DataTable();
+
+            try
+            {
+
+                this.OpenConnection();
+                MySqlCommand cmdComando = new MySqlCommand(strQuery, this._oConnection);
+
+                cmdComando.ExecuteNonQuery();
+                result = true;
+                //Load the Results on the DataTable
+            }
+            catch (Exception ex)
+            {
+                this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, strQuery);
+            }
+            finally
+            {
+                this.CloseConnection();
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Method to create Trigger for Delete
+        /// </summary>
+        /// <param name="insert"></param>
+        /// <returns></returns>
+        public Boolean CreateTriggerDelete(Table oTable)
+        {
+            Boolean result = false;
+            string strQuery = this.CreateDeleteTriggerSQL(oTable);
+
+            MySqlDataReader dtrResult = null;
+            DataTable dtResult = new DataTable();
+
+            try
+            {
+
+                this.OpenConnection();
+                MySqlCommand cmdComando = new MySqlCommand(strQuery, this._oConnection);
+
+                cmdComando.ExecuteNonQuery();
+                result = true;
+                //Load the Results on the DataTable
+            }
+            catch (Exception ex)
+            {
+                this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, strQuery);
+            }
+            finally
+            {
+                this.CloseConnection();
+            }
+            return result;
+        }
+        /// <summary>
+        /// Method to create Trigger
+        /// </summary>
+        /// <param name="insert"></param>
+        /// <returns></returns>
+        public Boolean CreateTriggerUpdate(Table oTable)
+        {
+            Boolean result = false;
+            string strQuery = this.CreateUpdateTriggerSQL(oTable);
+
+            MySqlDataReader dtrResult = null;
+            DataTable dtResult = new DataTable();
+
+            try
+            {
+
+                this.OpenConnection();
+                MySqlCommand cmdComando = new MySqlCommand(strQuery, this._oConnection);
+
+                cmdComando.ExecuteNonQuery();
+                result = true;
+                //Load the Results on the DataTable
+            }
+            catch (Exception ex)
+            {
+                this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, strQuery);
+            }
+            finally
+            {
+                this.CloseConnection();
+            }
+            return result;
+        }
+
+        #endregion
+
+
 
         #region Observer
 
