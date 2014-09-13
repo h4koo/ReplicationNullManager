@@ -39,11 +39,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Observer Design Pattern\Observable.cs" />
-    <Compile Include="Observer Design Pattern\Observer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReplicaBL.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\ReplicationManagerDA\ReplicationManagerDA.csproj">
+      <Project>{f728e3d7-d379-40c7-aa4c-646abceb51a0}</Project>
+      <Name>ReplicationManagerDA</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

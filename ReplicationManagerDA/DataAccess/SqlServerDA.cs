@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 using UtilitariosCD.LogErrores;
 using UtilitariosCD.Constantes;
 using System.Reflection;
-using ReplicationManagerBL.Observer_Design_Pattern;
+using ReplicationManagerDA.Observer_Design_Pattern;
 
 namespace ReplicationManagerDA
 {
