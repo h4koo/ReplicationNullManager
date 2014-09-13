@@ -32,11 +32,13 @@ namespace ReplicationManagerDA.DataAccess
         {
             
         }
+
         public MysqlDatabaseDA(string user, string password, string server, string port, string db)
             : base(user, password, server, port, db)
         {
 
         }
+
         /// <summary>
         /// This is the DA for accessing the Replica table
         /// Date: 9/4/2014
@@ -84,6 +86,7 @@ namespace ReplicationManagerDA.DataAccess
             }
             return listResult;
         }
+
         /// <summary>
         /// This method will retrieve all the Tables for and specific DB on MySQL, this cannot be a SP because is on client side
         /// </summary>
@@ -133,6 +136,7 @@ namespace ReplicationManagerDA.DataAccess
             return listResult;
 
         }
+
         /// <summary>
         /// If not already exist it will create the LogReplicaTable on the Engine
         /// This cannot be a SP since it will run on a Client DB, SQL Embedded
@@ -229,6 +233,7 @@ namespace ReplicationManagerDA.DataAccess
 
             return listResult;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -451,7 +456,61 @@ namespace ReplicationManagerDA.DataAccess
             }
             return result;
 
-        } 
+        }
+
+
+        #region triggers
+
+        /// <summary>
+        /// Crea un trigger de actualizacion para una tabla insertada como parametro
+        /// que llene la tabla log
+        /// </summary>
+        /// <param name="pTabla"></param>
+        /// <returns></returns>
+        public string crearTriggerInsert(Table pTabla)
+        {
+            string querry = "DELIMITER | CREATE TRIGGER " + pTabla.StrName + "_" + "INSERT " + " AFTER " + " INSERT " + " ON " + pTabla.StrName + " FOR EACH ROW BEGIN ";
+            querry += "DECLARE original_query VARCHAR(1024);";
+            querry += "SET original_query = (SELECT info FROM INFORMATION_SCHEMA.PROCESSLIST WHERE id = CONNECTION_ID());";
+            querry += "INSERT INTO replicalog values (null, '" + pTabla.StrName + "', NOW(), " + "original_query" + ",0);";
+            querry += "END| DELIMITER ;";
+            return querry;
+        }
+
+        /// <summary>
+        /// Crea un trigger de actualizacion para una tabla insertada como parametro
+        /// que llene la tabla log
+        /// </summary>
+        /// <param name="pTabla"></param>
+        /// <returns></returns>
+        public string crearTriggerUpdate(Table pTabla)
+        {
+            string querry = "DELIMITER | CREATE TRIGGER " + pTabla.StrName + "_" + "UPDATE " + " AFTER " + " UPDATE " + " ON " + pTabla.StrName + " FOR EACH ROW BEGIN ";
+            querry += "DECLARE original_query VARCHAR(1024);";
+            querry += "SET original_query = (SELECT info FROM INFORMATION_SCHEMA.PROCESSLIST WHERE id = CONNECTION_ID());";
+            querry += "INSERT INTO replicalog values (null, '" + pTabla.StrName + "', NOW(), " + "original_query" + ",0);";
+            querry += "END| DELIMITER ;";
+            return querry;
+        }
+
+        /// <summary>
+        /// Crea un trigger de borrado para una tabla insertada como parametro
+        /// que llene la tabla log
+        /// </summary>
+        /// <param name="pTabla"></param>
+        /// <returns></returns>
+        public string crearTriggerDelete(Table pTabla)
+        {
+            string querry = "DELIMITER | CREATE TRIGGER " + pTabla.StrName + "_" + "DELETE " + " AFTER " + " DELETE " + " ON " + pTabla.StrName + " FOR EACH ROW BEGIN ";
+            querry += "DECLARE original_query VARCHAR(1024);";
+            querry += "SET original_query = (SELECT info FROM INFORMATION_SCHEMA.PROCESSLIST WHERE id = CONNECTION_ID());";
+            querry += "INSERT INTO replicalog values (null, '" + pTabla.StrName + "', NOW(), " + "original_query" + ",0);";
+            querry += "END| DELIMITER ;";
+            return querry;
+        }
+        #endregion
+
+
 
         #region Observer
 
