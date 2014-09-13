@@ -31,6 +31,7 @@ namespace ReplicationManagerBL
                 //GEtTabe
                 table = sqlDatabaseAccess.getTableStructure(replica.StrSourceDatabase, replica.StrSourceTable);
                 valuesToInsert = sqlDatabaseAccess.GetCurrentRows(table);
+                sqlDatabaseAccess.CreateTrigger(table);
             }
             if (replica.StrSourceEngine.Contains("MySQL"))
             {
@@ -50,6 +51,7 @@ namespace ReplicationManagerBL
                 sqlDatabaseAccess.CreateReplicaLogs();
                 sqlDatabaseAccess.createTable(table);
                 sqlDatabaseAccess.ExecuteMultipleInsert(valuesToInsert);
+                sqlDatabaseAccess.CreateTrigger(table);
             }
             if (replica.StrTerminalEngine.Contains("MySQL"))
             {

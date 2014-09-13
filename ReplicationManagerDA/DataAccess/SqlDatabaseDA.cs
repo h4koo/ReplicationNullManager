@@ -435,7 +435,7 @@ namespace ReplicationManagerDA.DataAccess
                 SqlCommand cmdComando = new SqlCommand(strQuery, this._oConnection);
 
                 cmdComando.ExecuteNonQuery();
-
+                result = true;
             }
             catch (Exception ex)
             {
