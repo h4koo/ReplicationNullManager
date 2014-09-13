@@ -481,6 +481,9 @@ namespace ReplicationManagerDA.DataAccess
 
         public Boolean TableSync(string strTableName, string strEstament)
         {
+            this.DropTriggers(strTableName);
+
+             
             Boolean result = false;
 
             string strQuery = string.Empty;
@@ -492,10 +495,10 @@ namespace ReplicationManagerDA.DataAccess
                 this.OpenConnection();
 
                 // Deshabilitamos el trigger
-                strQuery =   "set @ENABLE_TRIGGER_" + strTableName + " = FALSE;";
+                //strQuery =   "set @ENABLE_TRIGGER_" + strTableName + " = FALSE;";
 
-                cmdComando = new MySqlCommand(strQuery, this._oConnection);
-                cmdComando.ExecuteNonQuery();
+                //cmdComando = new MySqlCommand(strQuery, this._oConnection);
+                //cmdComando.ExecuteNonQuery();
 
                 strQuery =   "set @sql_query = '"+strEstament+"' ;";
 
@@ -510,10 +513,10 @@ namespace ReplicationManagerDA.DataAccess
                 cmdComando = new MySqlCommand(strQuery, this._oConnection);
                 cmdComando.ExecuteNonQuery();
 
-                strQuery += "set @ENABLE_TRIGGER_" + strTableName + " = TRUE;";
+                //strQuery += "set @ENABLE_TRIGGER_" + strTableName + " = TRUE;";
           
-                cmdComando = new MySqlCommand(strQuery, this._oConnection);
-                cmdComando.ExecuteNonQuery();
+                //cmdComando = new MySqlCommand(strQuery, this._oConnection);
+                //cmdComando.ExecuteNonQuery();
                 
                 result = true;
 
@@ -528,6 +531,33 @@ namespace ReplicationManagerDA.DataAccess
                 this.CloseConnection();
             }
 
+            try
+            {
+                this.OpenConnection();
+
+                strQuery = CreateTrigger(strTableName.Trim(), "INSERT");
+                cmdComando = new MySqlCommand(strQuery, this._oConnection);
+                cmdComando.ExecuteNonQuery();
+                strQuery = CreateTrigger(strTableName.Trim(), "DELETE");
+                cmdComando = new MySqlCommand(strQuery, this._oConnection);
+                cmdComando.ExecuteNonQuery();
+
+                strQuery = CreateTrigger(strTableName.Trim(), "UPDATE");
+                cmdComando = new MySqlCommand(strQuery, this._oConnection);
+                cmdComando.ExecuteNonQuery();
+                result = true;
+            }
+            catch (Exception ex)
+            {
+                this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, strQuery);
+                result = false;
+            }
+            finally {
+                this.CloseConnection();
+            }
+
+
+
             return result;
         }
 
@@ -541,12 +571,65 @@ namespace ReplicationManagerDA.DataAccess
         public string CreateTrigger(Table oTable, string triggerEvent){
             string querry = "CREATE TRIGGER " + oTable.StrName + "_" + triggerEvent + " AFTER " + triggerEvent + " ON " + oTable.StrName + " FOR EACH ROW BEGIN ";
             querry += "DECLARE original_query VARCHAR(1024); ";
-            //querry += "IF @ENABLE_TRIGGER_" + oTable.StrName + " = TRUE THEN ";
+            //querry += "IF (ENABLE_TRIGGER_" + oTable.StrName + " = 1) THEN ";
             querry += "SET original_query = (SELECT info FROM INFORMATION_SCHEMA.PROCESSLIST WHERE id = CONNECTION_ID()); ";
             querry += "INSERT INTO replicalog values (null, '" + oTable.StrName + "', NOW(), " + "original_query" + ",0); ";
             //querry += "END IF; ";
             querry += "END";
             return querry;
+
+        }
+        public string CreateTrigger(string oTable, string triggerEvent)
+        {
+            string querry = "CREATE TRIGGER " + oTable + "_" + triggerEvent + " AFTER " + triggerEvent + " ON " + oTable + " FOR EACH ROW BEGIN ";
+            querry += "DECLARE original_query VARCHAR(1024); ";
+            //querry += "IF (ENABLE_TRIGGER_" + oTable.StrName + " = 1) THEN ";
+            querry += "SET original_query = (SELECT info FROM INFORMATION_SCHEMA.PROCESSLIST WHERE id = CONNECTION_ID()); ";
+            querry += "INSERT INTO replicalog values (null, '" + oTable + "', NOW(), " + "original_query" + ",0); ";
+            //querry += "END IF; ";
+            querry += "END";
+            return querry;
+
+        }
+        public Boolean DropTriggers(string strTableName){
+            Boolean result = false;
+            string strQuery = string.Empty;
+
+            MySqlDataReader dtrResult = null;
+            DataTable dtResult = new DataTable();
+
+            try
+            {
+                this.OpenConnection();
+
+                strQuery = "DROP TRIGGER " + strTableName.Trim() + "_INSERT";
+                MySqlCommand cmdComando = new MySqlCommand(strQuery, this._oConnection);
+                //cmdComando.Parameters.AddWithValue("@ENABLE_TRIGGER_" + oTable.StrName , "@ENABLE_TRIGGER_" + oTable.StrName);
+                cmdComando.ExecuteNonQuery();
+
+                strQuery = "DROP TRIGGER " + strTableName.Trim() + "_DELETE";
+                cmdComando = new MySqlCommand(strQuery, this._oConnection);
+                //cmdComando.Parameters.AddWithValue("@ENABLE_TRIGGER_" + oTable.StrName , "@ENABLE_TRIGGER_" + oTable.StrName);
+                cmdComando.ExecuteNonQuery();
+
+                strQuery = "DROP TRIGGER " + strTableName.Trim() + "_UPDATE";
+                cmdComando = new MySqlCommand(strQuery, this._oConnection);
+                //cmdComando.Parameters.AddWithValue("@ENABLE_TRIGGER_" + oTable.StrName , "@ENABLE_TRIGGER_" + oTable.StrName);
+                cmdComando.ExecuteNonQuery();
+
+                result = true;
+                //Load the Results on the DataTable
+            }
+            catch (Exception ex)
+            {
+                this._oLogErrors.GuardarLog(IConstantes.TIPOCAPA.ACCESODATOS, this.GetType().ToString(), MethodInfo.GetCurrentMethod().Name, ex.Message, strQuery);
+            }
+            finally
+            {
+                this.CloseConnection();
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -601,6 +684,7 @@ namespace ReplicationManagerDA.DataAccess
 
                 this.OpenConnection();
                 MySqlCommand cmdComando = new MySqlCommand(strQuery, this._oConnection);
+                //cmdComando.Parameters.AddWithValue("@ENABLE_TRIGGER_" + oTable.StrName , "@ENABLE_TRIGGER_" + oTable.StrName);
 
                 cmdComando.ExecuteNonQuery();
                 result = true;
@@ -636,7 +720,11 @@ namespace ReplicationManagerDA.DataAccess
                 this.OpenConnection();
                 MySqlCommand cmdComando = new MySqlCommand(strQuery, this._oConnection);
 
+                //cmdComando.Parameters.AddWithValue("@ENABLE_TRIGGER_" + oTable.StrName, "@ENABLE_TRIGGER_" + oTable.StrName);
+
                 cmdComando.ExecuteNonQuery();
+              
+                //cmdComando.ExecuteNonQuery();
                 result = true;
                 //Load the Results on the DataTable
             }
@@ -669,6 +757,9 @@ namespace ReplicationManagerDA.DataAccess
                 this.OpenConnection();
                 MySqlCommand cmdComando = new MySqlCommand(strQuery, this._oConnection);
 
+                //cmdComando.Parameters.AddWithValue("@ENABLE_TRIGGER_" + oTable.StrName, "@ENABLE_TRIGGER_" + oTable.StrName);
+
+                cmdComando.ExecuteNonQuery();
                 cmdComando.ExecuteNonQuery();
                 result = true;
                 //Load the Results on the DataTable
