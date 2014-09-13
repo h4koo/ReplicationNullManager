@@ -5,9 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using ReplicationManagerDA.DataAccess;
 using UtilitariosCD.Entities;
+using ReplicationManagerDA.Observer_Design_Pattern;
+
 namespace ReplicationManagerBL
 {
-    public class ReplicaBL
+    public class ReplicaBL 
     {
         /*
          * Constructor
@@ -23,36 +25,31 @@ namespace ReplicationManagerBL
         {
             //Source Config
             Table table = new Table();
+            SqlDatabaseBL sqlDatabaseBL = new SqlDatabaseBL();
+            MysqlDatabaseBL mysqlDatabaseBL = new MysqlDatabaseBL();
             List<Insert> valuesToInsert = new List<Insert>();
             if (replica.StrSourceEngine.Contains("SQL Server"))
             {
-                SqlDatabaseDA sqlDatabaseAccess = new SqlDatabaseDA(replica.StrSourceUser, replica.StrSourcePassword, replica.StrSourceIPAddress, replica.IntSourcePort.ToString(), replica.StrSourceDatabase);
-                sqlDatabaseAccess.CreateReplicaLogs();
-                //GEtTabe
-                table = sqlDatabaseAccess.getTableStructure(replica.StrSourceDatabase, replica.StrSourceTable);
-                valuesToInsert = sqlDatabaseAccess.GetCurrentRows(table);
+
+                table = sqlDatabaseBL.ConfigSource(replica);
+                valuesToInsert = sqlDatabaseBL.GetConfigValues(replica, table);
             }
             if (replica.StrSourceEngine.Contains("MySQL"))
             {
-                MysqlDatabaseDA sqlDatabaseAccess = new MysqlDatabaseDA(replica.StrSourceUser, replica.StrSourcePassword, replica.StrSourceIPAddress, replica.IntSourcePort.ToString(), replica.StrSourceDatabase);
-                sqlDatabaseAccess.CreateReplicaLogs();
-                table = sqlDatabaseAccess.getTableStructure(replica.StrSourceDatabase, replica.StrSourceTable);
-                valuesToInsert = sqlDatabaseAccess.GetCurrentRows(table);
+                table = mysqlDatabaseBL.ConfigSource(replica);
+                valuesToInsert = mysqlDatabaseBL.GetConfigValues(replica, table);
+             
+
             }
             //Terminal Config
             if (replica.StrTerminalEngine.Contains("SQL Server"))
             {
-                SqlDatabaseDA sqlDatabaseAccess = new SqlDatabaseDA(replica.StrTerminalUser, replica.StrTerminalPassword, replica.StrTerminalIPAddress, replica.IntTerminalPort.ToString(), replica.StrTerminalDatabase);
-                sqlDatabaseAccess.CreateReplicaLogs();
-                sqlDatabaseAccess.createTable(table);
-                sqlDatabaseAccess.ExecuteMultipleInsert(valuesToInsert);
+                sqlDatabaseBL.ConfigTerminal(replica,table,valuesToInsert);
+
             }
             if (replica.StrTerminalEngine.Contains("MySQL"))
             {
-                MysqlDatabaseDA sqlDatabaseAccess = new MysqlDatabaseDA(replica.StrTerminalUser, replica.StrTerminalPassword, replica.StrTerminalIPAddress, replica.IntTerminalPort.ToString(), replica.StrTerminalDatabase);
-                sqlDatabaseAccess.CreateReplicaLogs();
-                sqlDatabaseAccess.createTable(table);
-                sqlDatabaseAccess.ExecuteMultipleInsert(valuesToInsert);
+                mysqlDatabaseBL.ConfigTerminal(replica,table,valuesToInsert);
             }
         }
         /// <summary>
@@ -74,43 +71,7 @@ namespace ReplicationManagerBL
             EngineDA EnginesDA = new EngineDA();
             return EnginesDA.GetAllSupportedEngines();
         }
-        /// <summary>
-        /// Sql Method to obtain Tables on DB
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <param name="server"></param>
-        /// <param name="port"></param>
-        /// <returns></returns>
-        public List<Database> GetSqlDatabases(string user, string password, string server, string port) {
-            SqlDatabaseDA sqlDatabaseDA = new SqlDatabaseDA(user, password, server, port);
-            return sqlDatabaseDA.GetAllDatabases();
-        }
-        /// <summary>
-        /// MySql Method to obtain Tables on DB
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <param name="server"></param>
-        /// <param name="port"></param>
-        /// <returns></returns>
-        public List<Database> GetMySqlDatabases(string user, string password, string server, string port)
-        {
-            MysqlDatabaseDA sqlDatabaseDA = new MysqlDatabaseDA(user, password, server, port);
-            return sqlDatabaseDA.GetAllDatabases();
-        }
 
-
-        public List<Table> GetSqlTables(string user, string password, string server, string port, string database)
-        {
-            SqlDatabaseDA sqlDatabaseDA = new SqlDatabaseDA(user, password, server, port, database);
-            return sqlDatabaseDA.GetAllTables(database);
-        }
-
-        public List<Table> GetMySqlTables(string user, string password, string server, string port, string database)
-        {
-            MysqlDatabaseDA sqlDatabaseDA = new MysqlDatabaseDA(user, password, server, port, database);
-            return sqlDatabaseDA.GetAllTables(database);
-        }
+        
     }
 }
