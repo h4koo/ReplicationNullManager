@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ReplicationManagerBL.Observer_Design_Pattern
+namespace ReplicationManagerDA.Observer_Design_Pattern
 {
     public abstract class Observer
     {

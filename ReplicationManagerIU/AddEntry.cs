@@ -34,6 +34,7 @@ namespace ReplicationManagerIU
                 e.Handled = true;
             }
         }
+
         /// <summary>
         /// EndPoint Port Digit Validation
         /// Date: 9/4/2014
@@ -107,6 +108,7 @@ namespace ReplicationManagerIU
             //MessageBox.Show((cbEndPointEngine.SelectedItem as Engine).IntIdEngine.ToString());
             
         }
+
         /// <summary>
         /// This will configure the Initial Replica requirements on the client
         /// </summary>
@@ -146,6 +148,7 @@ namespace ReplicationManagerIU
                 //MessageBox.Show(table.ToString());
             }
         }
+
         /// <summary>
         /// Test Conection in order to get the Complete DB list on the Engine
         /// </summary>
@@ -191,6 +194,7 @@ namespace ReplicationManagerIU
         {
 
         }
+
         /// <summary>
         /// Query the Engine DB for the Complete Table list
         /// </summary>
