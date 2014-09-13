@@ -91,6 +91,7 @@ namespace ReplicationManagerDA
         /// </summary>
         public void CloseConnection() {
             try{
+
                 _oLogErrors = new LogErrores();
                 _oConnection.Close();
 
