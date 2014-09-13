@@ -9,7 +9,7 @@ using ReplicationManagerDA.Observer_Design_Pattern;
 
 namespace ReplicationManagerBL
 {
-    public class ReplicaBL 
+    public class ReplicaBL
     {
         /*
          * Constructor
@@ -38,29 +38,89 @@ namespace ReplicationManagerBL
             {
                 table = mysqlDatabaseBL.ConfigSource(replica);
                 valuesToInsert = mysqlDatabaseBL.GetConfigValues(replica, table);
-             
+
 
             }
             //Terminal Config
             if (replica.StrTerminalEngine.Contains("SQL Server"))
             {
-                sqlDatabaseBL.ConfigTerminal(replica,table,valuesToInsert);
+                sqlDatabaseBL.ConfigTerminal(replica, table, valuesToInsert);
 
             }
             if (replica.StrTerminalEngine.Contains("MySQL"))
             {
-                mysqlDatabaseBL.ConfigTerminal(replica,table,valuesToInsert);
+                mysqlDatabaseBL.ConfigTerminal(replica, table, valuesToInsert);
             }
         }
         /// <summary>
         /// This method insert on ReplicaManager Database
         /// </summary>
         /// <param name="replica"></param>
-        public void InsertReplica(Replica replica) { 
-                    ReplicaDA replicaDA = new ReplicaDA();
-                    replicaDA.Insert(replica);
+        public void InsertReplica(Replica replica)
+        {
+            ReplicaDA replicaDA = new ReplicaDA();
+            replicaDA.Insert(replica);
         }
 
+        public void CheckChangesReplica(Replica replica)
+        {
+
+            List<ReplicaLog> replicaLogSource = new List<ReplicaLog>();
+            List<ReplicaLog> replicaLogTerminal = new List<ReplicaLog>();
+
+            SqlDatabaseBL sqlDatabaseBL = new SqlDatabaseBL();
+            MysqlDatabaseBL mysqlDatabaseBL = new MysqlDatabaseBL();
+
+            if (replica.StrSourceEngine.Contains("SQL Server"))
+            {
+                replicaLogSource = sqlDatabaseBL.GetReplicaLogsSourceUnsynchronized(replica);
+            }
+            if (replica.StrSourceEngine.Contains("MySQL"))
+            {
+                replicaLogSource = mysqlDatabaseBL.GetReplicaLogsSourceUnsynchronized(replica);
+            }
+            if (replica.StrTerminalEngine.Contains("SQL Server"))
+            {
+                replicaLogTerminal = sqlDatabaseBL.GetReplicaLogsTerminalUnsynchronized(replica);
+            }
+            if (replica.StrTerminalEngine.Contains("MySQL"))
+            {
+                replicaLogTerminal = mysqlDatabaseBL.GetReplicaLogsTerminalUnsynchronized(replica);
+            }
+
+            if (replicaLogSource.Count() > 0)
+            {
+
+                //Sync Terminal
+                foreach (ReplicaLog replicaLog in replicaLogSource)
+                {
+                    if (replica.StrTerminalEngine.Contains("SQL Server"))
+                    {
+                        sqlDatabaseBL.TableSyncTerminal(replica, replicaLog);
+                    }
+                    if (replica.StrTerminalEngine.Contains("MySQL"))
+                    {
+                        mysqlDatabaseBL.TableSyncTerminal(replica,replicaLog);
+                    }
+                }
+            }
+            if (replicaLogTerminal.Count() > 0)
+            {
+
+                //Sync Terminal
+                foreach (ReplicaLog replicaLog in replicaLogTerminal)
+                {
+                    if (replica.StrSourceEngine.Contains("SQL Server"))
+                    {
+                        sqlDatabaseBL.TableSyncSource(replica, replicaLog);
+                    }
+                    if (replica.StrSourceEngine.Contains("MySQL"))
+                    {
+                        mysqlDatabaseBL.TableSyncSource(replica, replicaLog);
+                    }
+                }
+            }
+        }
         /// <summary>
         /// Query the DB to get all supported engines
         /// </summary>
@@ -72,6 +132,6 @@ namespace ReplicationManagerBL
             return EnginesDA.GetAllSupportedEngines();
         }
 
-        
+
     }
 }

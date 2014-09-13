@@ -337,7 +337,7 @@ namespace ReplicationManagerDA.DataAccess
                     oColumn.StrType = dtrFila["TYPE_NAME"].ToString();
                     
                     //nchar is set but default on all engines is varchar
-                    if (oColumn.StrType.Equals("nchar") || oColumn.StrType.Equals("varchar"))
+                    if (oColumn.StrType.Equals("nchar") || oColumn.StrType.Equals("varchar") || oColumn.StrType.Equals("char"))
                     {
                         oColumn.StrType = "varchar("+dtrFila["PRECISION"].ToString()+")";
                     }
@@ -561,15 +561,7 @@ namespace ReplicationManagerDA.DataAccess
                 {
                     this.OpenConnection();
 
-                    strQuery = "SELECT " +
-	                                " [idReplicaLog], " + 
-	                                " [ReplicaTable], " +
-	                                " [ReplicaDatetime], " +
-	                                " [ReplicaTransaction], " +
-	                                "[IsSynchronized]" +
-                                " FROM [dbo].[ReplicaLog] " +
-                                " WHERE " +
-	                                " [IsSynchronized] = 0 ";
+                    strQuery = "SELECT [idReplicaLog], [ReplicaTable], [ReplicaDatetime],[ReplicaTransaction], [IsSynchronized] FROM [dbo].[ReplicaLog] WHERE [IsSynchronized] = 0 ";
 
                     SqlCommand cmdComando = new SqlCommand(strQuery, this._oConnection);
                     dtrResult = cmdComando.ExecuteReader();

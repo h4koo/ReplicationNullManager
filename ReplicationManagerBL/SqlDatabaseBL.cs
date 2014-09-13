@@ -56,6 +56,25 @@ namespace ReplicationManagerBL
             sqlDatabaseAccess.CreateTrigger(table);
         }
 
+        public List<ReplicaLog> GetReplicaLogsSourceUnsynchronized(Replica replica) {
+            SqlDatabaseDA sqlDatabaseAccess = new SqlDatabaseDA(replica.StrSourceUser, replica.StrSourcePassword, replica.StrSourceIPAddress, replica.IntSourcePort.ToString(), replica.StrSourceDatabase);
+            return sqlDatabaseAccess.GetReplicaLogsUnsynchronized();
+        }
+        public List<ReplicaLog> GetReplicaLogsTerminalUnsynchronized(Replica replica)
+        {
+            SqlDatabaseDA sqlDatabaseAccess = new SqlDatabaseDA(replica.StrTerminalUser, replica.StrTerminalPassword, replica.StrTerminalIPAddress, replica.IntTerminalPort.ToString(), replica.StrTerminalDatabase);
+            return sqlDatabaseAccess.GetReplicaLogsUnsynchronized();
+        }
+
+        public Boolean TableSyncTerminal(Replica replica, ReplicaLog replicaLog) { 
+            SqlDatabaseDA sqlDatabaseAccess = new SqlDatabaseDA(replica.StrTerminalUser, replica.StrTerminalPassword, replica.StrTerminalIPAddress, replica.IntTerminalPort.ToString(), replica.StrTerminalDatabase);
+            return sqlDatabaseAccess.TableSync(replica.StrSourceTable, replicaLog.StrReplicaTransaction);
+        }
+        public Boolean TableSyncSource(Replica replica, ReplicaLog replicaLog) { 
+            SqlDatabaseDA sqlDatabaseAccess = new SqlDatabaseDA(replica.StrSourceUser, replica.StrSourcePassword, replica.StrSourceIPAddress, replica.IntSourcePort.ToString(), replica.StrSourceDatabase);
+            return sqlDatabaseAccess.TableSync(replica.StrSourceTable, replicaLog.StrReplicaTransaction);
+        }
+
         public void VerifyChanges()
         {
             //SqlDatabaseDA sqlDataBaseDA = new SqlDatabaseDA();

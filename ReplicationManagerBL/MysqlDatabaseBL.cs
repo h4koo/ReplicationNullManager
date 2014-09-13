@@ -56,5 +56,27 @@ namespace ReplicationManagerBL
             sqlDatabaseAccess.CreateTriggerUpdate(table);
         }
 
+        public List<ReplicaLog> GetReplicaLogsSourceUnsynchronized(Replica replica)
+        {
+            MysqlDatabaseDA sqlDatabaseAccess = new MysqlDatabaseDA(replica.StrSourceUser, replica.StrSourcePassword, replica.StrSourceIPAddress, replica.IntSourcePort.ToString(), replica.StrSourceDatabase);
+            return sqlDatabaseAccess.GetReplicaLogsUnsynchronized();
+        }
+        public List<ReplicaLog> GetReplicaLogsTerminalUnsynchronized(Replica replica)
+        {
+            MysqlDatabaseDA sqlDatabaseAccess = new MysqlDatabaseDA(replica.StrTerminalUser, replica.StrTerminalPassword, replica.StrTerminalIPAddress, replica.IntTerminalPort.ToString(), replica.StrTerminalDatabase);
+            return sqlDatabaseAccess.GetReplicaLogsUnsynchronized();
+        }
+
+        public Boolean TableSyncTerminal(Replica replica, ReplicaLog replicaLog)
+        {
+            MysqlDatabaseDA sqlDatabaseAccess = new MysqlDatabaseDA(replica.StrTerminalUser, replica.StrTerminalPassword, replica.StrTerminalIPAddress, replica.IntTerminalPort.ToString(), replica.StrTerminalDatabase);
+            return sqlDatabaseAccess.TableSync(replica.StrSourceTable, replicaLog.StrReplicaTransaction);
+        }
+        public Boolean TableSyncSource(Replica replica, ReplicaLog replicaLog)
+        {
+            MysqlDatabaseDA sqlDatabaseAccess = new MysqlDatabaseDA(replica.StrSourceUser, replica.StrSourcePassword, replica.StrSourceIPAddress, replica.IntSourcePort.ToString(), replica.StrSourceDatabase);
+            return sqlDatabaseAccess.TableSync(replica.StrSourceTable, replicaLog.StrReplicaTransaction);
+        }
+
     }
 }
